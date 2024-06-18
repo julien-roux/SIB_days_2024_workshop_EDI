@@ -157,7 +157,7 @@ tail(dds$BigWigURL)
 
 ## Principal component analysis
 
-```{r pca}
+```{r}
 ## PCA on top 500 most variable genes
 plotPCA(vst, 
         ntop = 500,
@@ -179,7 +179,7 @@ plotPCA(vst,
 
 # Differential expression analysis
 
-```{r de_analysis}
+```{r}
 ## Update design for DE analysis
 design(dds) <- ~ 0 + group + tissue
 

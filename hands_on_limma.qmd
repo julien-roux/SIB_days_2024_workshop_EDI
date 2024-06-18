@@ -165,7 +165,7 @@ tail(dge$samples$BigWigURL)
 
 ## Principal component analysis
 
-```{r pca}
+```{r}
 ## PCA on top 500 most variable genes
 iqrs <- apply(log2cpm, 1, IQR)
 sel <- iqrs >= sort(iqrs, decreasing = T)[500]
@@ -200,7 +200,7 @@ plot(pca1$x[, 2], pca1$x[, 3],
 
 # Differential expression analysis
 
-```{r de_analysis}
+```{r}
 ## Design matrix
 ## We use an additive model accounting for tissue effect (which is not of main interest here)
 moma <- model.matrix(~ 0 + group + tissue, data=dge$samples) 

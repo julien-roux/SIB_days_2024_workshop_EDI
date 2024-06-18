@@ -103,6 +103,7 @@ dge <- calcNormFactors(dge)
 log2cpm <- edgeR::cpm(dge, 
                       log=TRUE, 
                       normalized.lib.sizes=TRUE)
+# saveRDS(log2cpm, "log2cpm.rds")
 plotDensities(log2cpm, 
               group=dge$samples$group, 
               col=myPalette, 
@@ -170,7 +171,7 @@ tail(dge$samples$BigWigURL)
 
 ## Principal component analysis
 
-```{r pca}
+```{r}
 ## PCA on top 500 most variable genes
 iqrs <- apply(log2cpm, 1, IQR)
 sel <- iqrs >= sort(iqrs, decreasing = T)[500]
@@ -207,7 +208,7 @@ plot(pca1$x[, 2], pca1$x[, 3],
 
 Here we start to differ from the `hands_on_limma.qmd` script...
 
-```{r de_analysis}
+```{r}
 ## Let's update the grouping variable to include the 3 experimental factors (and order levels in a logical way)
 dge$samples$group <- factor(paste0(dge$samples$tissue, ".", dge$samples$treatment, ".", dge$samples$sex), 
                             levels=c("Cortex.Vehicle.female", "Cortex.Tamoxifen.female", 
