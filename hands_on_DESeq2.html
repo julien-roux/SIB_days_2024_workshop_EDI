@@ -145,7 +145,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="loading-data-in-r" class="level1">
 <h1>Loading data in R</h1>
-<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-1_d60b3170a33ccb9141e079c7ed14da4a">
+<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-1_312b13bd00a0570167c1a8e5928f140c">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## If packages are missing: install.packages('BiocManager')</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">## BiocManager::install('...')</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -160,428 +160,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>myPalette <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">"Set1"</span>), <span class="fu">brewer.pal</span>(<span class="dv">8</span>, <span class="st">"Set2"</span>))</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="do">## DE analysis</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(recount3)</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vsn)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(edgeR)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SummarizedExperiment)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scater)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scuttle)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="do">## Needed for GSEA</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fgsea)</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(org.Mm.eg.db)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GO.db)</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(devtools<span class="sc">::</span><span class="fu">session_info</span>(), <span class="st">"session_info_DESeq2.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vsn)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(edgeR)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scater)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="do">## Needed for GSEA</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fgsea)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(org.Mm.eg.db)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GO.db)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(devtools<span class="sc">::</span><span class="fu">session_info</span>(), <span class="st">"session_info_DESeq2.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="read-in-data" class="level1">
 <h1>Read in data</h1>
 <p>Raw and processed data are available from GEO <a href="GEO:%20https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE135752">(accession GSE135752)</a></p>
-<p>Today we will load directly the reprocessed data from the <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02533-6">recount3 project</a>, a project which reprocessed uniformly thousands of bulk RNA-seq datasets from human and mouse. A <a href="https://bioconductor.org/packages/3.17/bioc/html/recount3.html">Bioconductor package</a> allows to easily retrieve this data in the form of standard Bioconductor classes objects, such as <code>RangedSummarizedExperiment</code>.</p>
-<p><img src="wrench-and-hammer.png" class="img-fluid"> Connect to the <a href="https://jhubiostatistics.shinyapps.io/recount3-study-explorer/">recount3 study explorer</a> Shiny app and search for our dataset (accession “SRP218156”).</p>
-<p><img src="elemental-tip.png" class="img-fluid"> Another database of reprocessed datasets is GREIN, which provides interesting QC figures that could be helpful: http://www.ilincs.org/apps/grein/?gse=GSE135752</p>
-<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-2_37929db3a782c666481ce47d6cc32251">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## retrieve data frame listing all available projects in mouse</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>all_projects <span class="ot">&lt;-</span> <span class="fu">available_projects</span>(<span class="at">organism =</span> <span class="st">"mouse"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Select our dataset</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>selected <span class="ot">&lt;-</span> all_projects <span class="sc">|&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">subset</span>(project <span class="sc">==</span> <span class="st">"SRP218156"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Create a RangedSummarizedExperiment object at the gene level</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>rse_gene <span class="ot">&lt;-</span> <span class="fu">create_rse</span>(<span class="at">project_info =</span> selected)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="do">## The recount project records the sum of the base level coverage for each</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="do">## gene. These raw counts have to be transformed to 'classical' read-counts to</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="do">## be processed by standard DE analysis tools</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">assayNames</span>(rse_gene)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "raw_counts"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">assay</span>(rse_gene, <span class="st">"counts"</span>) <span class="ot">&lt;-</span> <span class="fu">transform_counts</span>(rse_gene)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Information about our reprocessed dataset</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span>(rse_gene)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$time_created
-[1] "2024-06-18 09:53:58 CEST"
-
-$recount3_version
-          package ondiskversion loadedversion
-recount3 recount3        1.12.0        1.12.0
-                                                                                  path
-recount3 /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library/recount3
-                                                                            loadedpath
-recount3 /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library/recount3
-         attached is_base       date       source md5ok
-recount3     TRUE   FALSE 2023-10-26 Bioconductor    NA
-                                                                      library
-recount3 /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library
-
-$project
-[1] "SRP218156"
-
-$project_home
-[1] "data_sources/sra"
-
-$type
-[1] "gene"
-
-$organism
-[1] "mouse"
-
-$annotation
-[1] "gencode_v23"
-
-$recount3_url
-[1] "http://duffel.rail.bio/recount3"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Gene metadata</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rowRanges</span>(rse_gene)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>GRanges object with 55421 ranges and 11 metadata columns:
-                         seqnames            ranges strand |   source     type
-                            &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;factor&gt; &lt;factor&gt;
-  ENSMUSG00000079800.2 GL456210.1        9124-58882      - |  ENSEMBL     gene
-  ENSMUSG00000095092.1 GL456210.1     108390-110303      - |  ENSEMBL     gene
-  ENSMUSG00000079192.2 GL456210.1     123792-124928      + |  ENSEMBL     gene
-  ENSMUSG00000079794.2 GL456210.1     135395-136519      - |  ENSEMBL     gene
-  ENSMUSG00000094799.1 GL456210.1     147792-149707      + |  ENSEMBL     gene
-                   ...        ...               ...    ... .      ...      ...
-  ENSMUSG00000095366.2       chrY 90752427-90755467      - |  HAVANA      gene
-  ENSMUSG00000095134.2       chrY 90753057-90763485      + |  HAVANA      gene
-  ENSMUSG00000096768.8       chrY 90784738-90816465      + |  HAVANA      gene
-  ENSMUSG00000096850.1       chrY 90838869-90839177      - |  ENSEMBL     gene
-  ENSMUSG00000099871.1       chrY 90837413-90844040      + |  HAVANA      gene
-                       bp_length     phase              gene_id
-                       &lt;numeric&gt; &lt;integer&gt;          &lt;character&gt;
-  ENSMUSG00000079800.2      1271      &lt;NA&gt; ENSMUSG00000079800.2
-  ENSMUSG00000095092.1       366      &lt;NA&gt; ENSMUSG00000095092.1
-  ENSMUSG00000079192.2       255      &lt;NA&gt; ENSMUSG00000079192.2
-  ENSMUSG00000079794.2       255      &lt;NA&gt; ENSMUSG00000079794.2
-  ENSMUSG00000094799.1       366      &lt;NA&gt; ENSMUSG00000094799.1
-                   ...       ...       ...                  ...
-  ENSMUSG00000095366.2      1181      &lt;NA&gt; ENSMUSG00000095366.2
-  ENSMUSG00000095134.2      1248      &lt;NA&gt; ENSMUSG00000095134.2
-  ENSMUSG00000096768.8      4501      &lt;NA&gt; ENSMUSG00000096768.8
-  ENSMUSG00000096850.1       309      &lt;NA&gt; ENSMUSG00000096850.1
-  ENSMUSG00000099871.1       548      &lt;NA&gt; ENSMUSG00000099871.1
-                                    gene_type   gene_name       level
-                                  &lt;character&gt; &lt;character&gt; &lt;character&gt;
-  ENSMUSG00000079800.2         protein_coding  AC125149.3           3
-  ENSMUSG00000095092.1         protein_coding  AC125149.5           3
-  ENSMUSG00000079192.2         protein_coding  AC125149.1           3
-  ENSMUSG00000079794.2         protein_coding  AC125149.2           3
-  ENSMUSG00000094799.1         protein_coding  AC125149.4           3
-                   ...                    ...         ...         ...
-  ENSMUSG00000095366.2                 lncRNA     Gm21860           2
-  ENSMUSG00000095134.2 unprocessed_pseudogene    Mid1-ps1           2
-  ENSMUSG00000096768.8                 lncRNA     Gm47283           2
-  ENSMUSG00000096850.1         protein_coding     Gm21748           3
-  ENSMUSG00000099871.1 unprocessed_pseudogene     Gm21742           2
-                            mgi_id          havana_gene         tag
-                       &lt;character&gt;          &lt;character&gt; &lt;character&gt;
-  ENSMUSG00000079800.2        &lt;NA&gt;                 &lt;NA&gt;        &lt;NA&gt;
-  ENSMUSG00000095092.1        &lt;NA&gt;                 &lt;NA&gt;        &lt;NA&gt;
-  ENSMUSG00000079192.2        &lt;NA&gt;                 &lt;NA&gt;        &lt;NA&gt;
-  ENSMUSG00000079794.2        &lt;NA&gt;                 &lt;NA&gt;        &lt;NA&gt;
-  ENSMUSG00000094799.1        &lt;NA&gt;                 &lt;NA&gt;        &lt;NA&gt;
-                   ...         ...                  ...         ...
-  ENSMUSG00000095366.2 MGI:5434024 OTTMUSG00000074801.1        &lt;NA&gt;
-  ENSMUSG00000095134.2 MGI:5780070 OTTMUSG00000047373.1        &lt;NA&gt;
-  ENSMUSG00000096768.8 MGI:6096131 OTTMUSG00000074820.2        &lt;NA&gt;
-  ENSMUSG00000096850.1 MGI:5433912                 &lt;NA&gt;        &lt;NA&gt;
-  ENSMUSG00000099871.1 MGI:5433906 OTTMUSG00000047374.1        &lt;NA&gt;
-  -------
-  seqinfo: 45 sequences from an unspecified genome; no seqlengths</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rowData</span>(rse_gene)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>DataFrame with 55421 rows and 11 columns
-                       source     type bp_length     phase              gene_id
-                     &lt;factor&gt; &lt;factor&gt; &lt;numeric&gt; &lt;integer&gt;          &lt;character&gt;
-ENSMUSG00000079800.2  ENSEMBL     gene      1271        NA ENSMUSG00000079800.2
-ENSMUSG00000095092.1  ENSEMBL     gene       366        NA ENSMUSG00000095092.1
-ENSMUSG00000079192.2  ENSEMBL     gene       255        NA ENSMUSG00000079192.2
-ENSMUSG00000079794.2  ENSEMBL     gene       255        NA ENSMUSG00000079794.2
-ENSMUSG00000094799.1  ENSEMBL     gene       366        NA ENSMUSG00000094799.1
-...                       ...      ...       ...       ...                  ...
-ENSMUSG00000095366.2  HAVANA      gene      1181        NA ENSMUSG00000095366.2
-ENSMUSG00000095134.2  HAVANA      gene      1248        NA ENSMUSG00000095134.2
-ENSMUSG00000096768.8  HAVANA      gene      4501        NA ENSMUSG00000096768.8
-ENSMUSG00000096850.1  ENSEMBL     gene       309        NA ENSMUSG00000096850.1
-ENSMUSG00000099871.1  HAVANA      gene       548        NA ENSMUSG00000099871.1
-                                  gene_type   gene_name       level      mgi_id
-                                &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;character&gt;
-ENSMUSG00000079800.2         protein_coding  AC125149.3           3          NA
-ENSMUSG00000095092.1         protein_coding  AC125149.5           3          NA
-ENSMUSG00000079192.2         protein_coding  AC125149.1           3          NA
-ENSMUSG00000079794.2         protein_coding  AC125149.2           3          NA
-ENSMUSG00000094799.1         protein_coding  AC125149.4           3          NA
-...                                     ...         ...         ...         ...
-ENSMUSG00000095366.2                 lncRNA     Gm21860           2 MGI:5434024
-ENSMUSG00000095134.2 unprocessed_pseudogene    Mid1-ps1           2 MGI:5780070
-ENSMUSG00000096768.8                 lncRNA     Gm47283           2 MGI:6096131
-ENSMUSG00000096850.1         protein_coding     Gm21748           3 MGI:5433912
-ENSMUSG00000099871.1 unprocessed_pseudogene     Gm21742           2 MGI:5433906
-                              havana_gene         tag
-                              &lt;character&gt; &lt;character&gt;
-ENSMUSG00000079800.2                   NA          NA
-ENSMUSG00000095092.1                   NA          NA
-ENSMUSG00000079192.2                   NA          NA
-ENSMUSG00000079794.2                   NA          NA
-ENSMUSG00000094799.1                   NA          NA
-...                                   ...         ...
-ENSMUSG00000095366.2 OTTMUSG00000074801.1          NA
-ENSMUSG00000095134.2 OTTMUSG00000047373.1          NA
-ENSMUSG00000096768.8 OTTMUSG00000074820.2          NA
-ENSMUSG00000096850.1                   NA          NA
-ENSMUSG00000099871.1 OTTMUSG00000047374.1          NA</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Parse the Ensembl IDs (useful later)</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rowData</span>(rse_gene)<span class="sc">$</span>gene_id <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">.</span><span class="sc">\\</span><span class="st">d+$"</span>, <span class="st">""</span>, <span class="fu">rowData</span>(rse_gene)<span class="sc">$</span>gene_id)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(rse_gene) <span class="ot">&lt;-</span> <span class="fu">rowData</span>(rse_gene)<span class="sc">$</span>gene_id</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Sample metadata: a lot of columns!  colData(rse_gene)</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>recount3_cols <span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">colData</span>(rse_gene))</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Group columns by source</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(<span class="fu">table</span>(<span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">..*"</span>, <span class="st">""</span>, recount3_cols)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-      BigWigURL     external_id         rail_id           study recount_project 
-              1               1               1               1               5 
-   recount_pred  recount_seq_qc             sra      recount_qc 
-              7              12              40             109 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="do">## The colData from SRA include the sample information. What does each column</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="do">## represent?</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">colData</span>(rse_gene)[, <span class="fu">grep</span>(<span class="st">"sra"</span>, recount3_cols)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>DataFrame with 6 rows and 40 columns
-           sra.sample_acc.x sra.experiment_acc sra.submission_acc
-                &lt;character&gt;        &lt;character&gt;        &lt;character&gt;
-SRR9956060       SRS5258490         SRX6704419          SRA938758
-SRR9956061       SRS5258491         SRX6704420          SRA938758
-SRR9956062       SRS5258492         SRX6704421          SRA938758
-SRR9956063       SRS5258493         SRX6704422          SRA938758
-SRR9956064       SRS5258494         SRX6704423          SRA938758
-SRR9956065       SRS5258495         SRX6704424          SRA938758
-           sra.submission_center sra.submission_lab        sra.study_title
-                     &lt;character&gt;          &lt;logical&gt;            &lt;character&gt;
-SRR9956060                   GEO                 NA Tamoxifen induction ..
-SRR9956061                   GEO                 NA Tamoxifen induction ..
-SRR9956062                   GEO                 NA Tamoxifen induction ..
-SRR9956063                   GEO                 NA Tamoxifen induction ..
-SRR9956064                   GEO                 NA Tamoxifen induction ..
-SRR9956065                   GEO                 NA Tamoxifen induction ..
-               sra.study_abstract sra.study_description   sra.experiment_title
-                      &lt;character&gt;             &lt;logical&gt;            &lt;character&gt;
-SRR9956060 The systemic deliver..                    NA GSM4027456: ctx951; ..
-SRR9956061 The systemic deliver..                    NA GSM4027457: ctx952; ..
-SRR9956062 The systemic deliver..                    NA GSM4027458: ctx953; ..
-SRR9956063 The systemic deliver..                    NA GSM4027459: ctx954; ..
-SRR9956064 The systemic deliver..                    NA GSM4027460: ctx955; ..
-SRR9956065 The systemic deliver..                    NA GSM4027461: ctx957; ..
-           sra.design_description sra.sample_description sra.library_name
-                        &lt;logical&gt;              &lt;logical&gt;        &lt;logical&gt;
-SRR9956060                     NA                     NA               NA
-SRR9956061                     NA                     NA               NA
-SRR9956062                     NA                     NA               NA
-SRR9956063                     NA                     NA               NA
-SRR9956064                     NA                     NA               NA
-SRR9956065                     NA                     NA               NA
-           sra.library_strategy sra.library_source sra.library_selection
-                    &lt;character&gt;        &lt;character&gt;           &lt;character&gt;
-SRR9956060              RNA-Seq     TRANSCRIPTOMIC                  cDNA
-SRR9956061              RNA-Seq     TRANSCRIPTOMIC                  cDNA
-SRR9956062              RNA-Seq     TRANSCRIPTOMIC                  cDNA
-SRR9956063              RNA-Seq     TRANSCRIPTOMIC                  cDNA
-SRR9956064              RNA-Seq     TRANSCRIPTOMIC                  cDNA
-SRR9956065              RNA-Seq     TRANSCRIPTOMIC                  cDNA
-           sra.library_layout sra.paired_nominal_length
-                  &lt;character&gt;                 &lt;logical&gt;
-SRR9956060             paired                        NA
-SRR9956061             paired                        NA
-SRR9956062             paired                        NA
-SRR9956063             paired                        NA
-SRR9956064             paired                        NA
-SRR9956065             paired                        NA
-           sra.paired_nominal_stdev sra.library_construction_protocol
-                          &lt;logical&gt;                       &lt;character&gt;
-SRR9956060                       NA            AllPrep DNA/RNA Mini..
-SRR9956061                       NA            AllPrep DNA/RNA Mini..
-SRR9956062                       NA            AllPrep DNA/RNA Mini..
-SRR9956063                       NA            AllPrep DNA/RNA Mini..
-SRR9956064                       NA            AllPrep DNA/RNA Mini..
-SRR9956065                       NA            AllPrep DNA/RNA Mini..
-           sra.platform_model  sra.sample_attributes sra.experiment_attributes
-                  &lt;character&gt;            &lt;character&gt;               &lt;character&gt;
-SRR9956060        NextSeq 500 age;;3 Months|Sex;;f..                          
-SRR9956061        NextSeq 500 age;;3 Months|Sex;;f..                          
-SRR9956062        NextSeq 500 age;;3 Months|Sex;;f..                          
-SRR9956063        NextSeq 500 age;;3 Months|Sex;;f..                          
-SRR9956064        NextSeq 500 age;;3 Months|Sex;;f..                          
-SRR9956065        NextSeq 500 age;;3 Months|Sex;;f..                          
-           sra.spot_length sra.sample_name sra.sample_title sra.sample_bases
-                 &lt;logical&gt;     &lt;character&gt;      &lt;character&gt;        &lt;numeric&gt;
-SRR9956060              NA      GSM4027456           ctx951       1224277008
-SRR9956061              NA      GSM4027457           ctx952       1636327120
-SRR9956062              NA      GSM4027458           ctx953       1259195512
-SRR9956063              NA      GSM4027459           ctx954       1794200552
-SRR9956064              NA      GSM4027460           ctx955       1643631936
-SRR9956065              NA      GSM4027461           ctx957       1361214720
-           sra.sample_spots   sra.run_published  sra.size sra.run_total_bases
-                  &lt;integer&gt;         &lt;character&gt; &lt;integer&gt;           &lt;numeric&gt;
-SRR9956060          8054454 2019-08-14 17:36:05 481063671          1224277008
-SRR9956061         10765310 2019-08-14 17:36:05 653770224          1636327120
-SRR9956062          8284181 2019-08-14 17:36:05 513989033          1259195512
-SRR9956063         11803951 2019-08-14 17:36:05 706586162          1794200552
-SRR9956064         10813368 2019-08-14 17:36:05 646656958          1643631936
-SRR9956065          8955360 2019-08-14 17:36:05 550616703          1361214720
-           sra.run_total_spots sra.num_reads sra.num_spots
-                     &lt;integer&gt;     &lt;integer&gt;     &lt;integer&gt;
-SRR9956060             8054454             2       8054454
-SRR9956061            10765310             2      10765310
-SRR9956062             8284181             2       8284181
-SRR9956063            11803951             2      11803951
-SRR9956064            10813368             2      10813368
-SRR9956065             8955360             2       8955360
-                    sra.read_info sra.run_alias sra.run_center_name
-                      &lt;character&gt;   &lt;character&gt;           &lt;logical&gt;
-SRR9956060 index:0,count:805445.. GSM4027456_r1                  NA
-SRR9956061 index:0,count:107653.. GSM4027457_r1                  NA
-SRR9956062 index:0,count:828418.. GSM4027458_r1                  NA
-SRR9956063 index:0,count:118039.. GSM4027459_r1                  NA
-SRR9956064 index:0,count:108133.. GSM4027460_r1                  NA
-SRR9956065 index:0,count:895536.. GSM4027461_r1                  NA
-           sra.run_broker_name sra.run_center  sra.mesa sra.pubmed_id
-                     &lt;logical&gt;      &lt;logical&gt; &lt;logical&gt;     &lt;logical&gt;
-SRR9956060                  NA             NA        NA            NA
-SRR9956061                  NA             NA        NA            NA
-SRR9956062                  NA             NA        NA            NA
-SRR9956063                  NA             NA        NA            NA
-SRR9956064                  NA             NA        NA            NA
-SRR9956065                  NA             NA        NA            NA</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">## This column corresponds to the sample name on GEO</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(rse_gene<span class="sc">$</span>sra.sample_title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-   951    952    953    954    955    957    958    959    960    961    962 
-     2      2      2      2      2      2      2      2      2      2      2 
-   963    964    965    966 ctx951 ctx952 ctx953 ctx954 ctx955 ctx957 ctx958 
-     2      2      2      2      1      1      1      1      1      1      1 
-ctx959 ctx960 ctx961 ctx962 ctx963 ctx964 ctx965 ctx966 ret951 ret952 ret953 
-     1      1      1      1      1      1      1      1      1      1      1 
-ret954 ret955 ret957 ret958 ret959 ret960 ret961 ret962 ret963 ret964 ret965 
-     1      1      1      1      1      1      1      1      1      1      1 
-ret966 
-     1 </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## For some samples we have multiple runs (SRR IDs), let's sum their read</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="do">## counts</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>rse_gene <span class="ot">&lt;-</span> <span class="fu">aggregateAcrossCells</span>(rse_gene, <span class="at">ids =</span> rse_gene<span class="sc">$</span>sra.sample_title, <span class="at">statistics =</span> <span class="st">"sum"</span>)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Simplify metadata columns of interest by parsing 'sra.sample_attributes'</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>rse_gene<span class="sc">$</span>sex <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">strsplit2</span>(rse_gene<span class="sc">$</span>sra.sample_attributes, <span class="at">split =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">|"</span>)[,</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span>])</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(rse_gene<span class="sc">$</span>sex) <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"Sex;;"</span>, <span class="st">""</span>, <span class="fu">levels</span>(rse_gene<span class="sc">$</span>sex))</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>rse_gene<span class="sc">$</span>tissue <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">strsplit2</span>(rse_gene<span class="sc">$</span>sra.sample_attributes, <span class="at">split =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">|"</span>)[,</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>])</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(rse_gene<span class="sc">$</span>tissue) <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"source_name;;"</span>, <span class="st">""</span>, <span class="fu">levels</span>(rse_gene<span class="sc">$</span>tissue))</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>rse_gene<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">strsplit2</span>(rse_gene<span class="sc">$</span>sra.sample_attributes, <span class="at">split =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">|"</span>)[,</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="dv">4</span>])</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(rse_gene<span class="sc">$</span>treatment) <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"treatment;;"</span>, <span class="st">""</span>, <span class="fu">levels</span>(rse_gene<span class="sc">$</span>treatment))</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(rse_gene<span class="sc">$</span>treatment) <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">s</span><span class="sc">\\</span><span class="st">(Sunflower</span><span class="sc">\\</span><span class="st">sOil</span><span class="sc">\\</span><span class="st">)"</span>, <span class="st">""</span>, <span class="fu">levels</span>(rse_gene<span class="sc">$</span>treatment))</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Relevel to have Vehicle as reference</span></span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>rse_gene<span class="sc">$</span>treatment <span class="ot">&lt;-</span> <span class="fu">relevel</span>(rse_gene<span class="sc">$</span>treatment, <span class="at">ref =</span> <span class="st">"Vehicle"</span>)</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="do">## From the methods it seems that the 3 tissues were extracted from the same</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="do">## mouse</span></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>rse_gene<span class="sc">$</span>mouse <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">gsub</span>(<span class="st">"ctx|ret"</span>, <span class="st">""</span>, rse_gene<span class="sc">$</span>sra.sample_title))</span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="do">## Add grouping variable (grouping 2 factors together, will be useful later)</span></span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="do">## and order levels in a logical way</span></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>rse_gene<span class="sc">$</span>group <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">paste0</span>(rse_gene<span class="sc">$</span>treatment, <span class="st">"."</span>, rse_gene<span class="sc">$</span>sex), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Vehicle.female"</span>,</span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Tamoxifen.female"</span>, <span class="st">"Vehicle.male"</span>, <span class="st">"Tamoxifen.male"</span>))</span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="do">## Overview of experiment design</span></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(rse_gene)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 55421    45</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(rse_gene<span class="sc">$</span>sex, rse_gene<span class="sc">$</span>treatment, rse_gene<span class="sc">$</span>tissue)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>, ,  = Cortex
-
-        
-         Vehicle Tamoxifen
-  female       3         4
-  male         4         4
-
-, ,  = Hippocampus
-
-        
-         Vehicle Tamoxifen
-  female       3         4
-  male         4         4
-
-, ,  = Retina
-
-        
-         Vehicle Tamoxifen
-  female       3         4
-  male         4         4</code></pre>
-</div>
-</div>
+<p>Today we will load directly the reprocessed data loaded from the <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02533-6">recount3 project</a>, a project which reprocessed uniformly thousands of bulk RNA-seq datasets from human and mouse. See the <code>hands_on_recount3.qmd</code> script where we import and format the <code>DESeqDataSet</code> object.</p>
 </section>
 <section id="gene-filtering" class="level1">
 <h1>Gene filtering</h1>
-<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-3_8ebfdf33de4c35756f8912c4ec6f04cc">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Convert to DESeqDataSet object (ignore the design argument for now)</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSet</span>(rse_gene, <span class="at">design =</span> <span class="sc">~</span><span class="dv">1</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Apply count data transformation</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>vst <span class="ot">&lt;-</span> <span class="fu">varianceStabilizingTransformation</span>(dds, <span class="at">blind =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">meanSdPlot</span>(<span class="fu">assay</span>(vst), <span class="at">ranks =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-2_3a33b38fd6e1331c8fcb49e66e743f1f">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Convert to DESeqDataSet object (ignore the design argument for now)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"DESeqDataSet.rds"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Apply count data transformation</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>vst <span class="ot">&lt;-</span> <span class="fu">varianceStabilizingTransformation</span>(dds, <span class="at">blind =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">meanSdPlot</span>(<span class="fu">assay</span>(vst), <span class="at">ranks =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualize distribution before filtering (protein-coding genes only)</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotDensities</span>(<span class="fu">assay</span>(vst)[<span class="fu">rowData</span>(vst)<span class="sc">$</span>gene_type <span class="sc">==</span> <span class="st">"protein_coding"</span>, ], <span class="at">group =</span> dds<span class="sc">$</span>tissue,</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> myPalette, <span class="at">legend =</span> <span class="st">"topright"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualize distribution before filtering (protein-coding genes only)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotDensities</span>(<span class="fu">assay</span>(vst)[<span class="fu">rowData</span>(vst)<span class="sc">$</span>gene_type <span class="sc">==</span> <span class="st">"protein_coding"</span>, ], <span class="at">group =</span> dds<span class="sc">$</span>tissue,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> myPalette, <span class="at">legend =</span> <span class="st">"topright"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid" width="672"></p>
+<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## One cortex sample is weird: let's remove it</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> dds[, <span class="fu">colnames</span>(dds) <span class="sc">!=</span> <span class="st">"ctx962"</span>]</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Filter lowly expressed genes We keep only rows that have a count of at least</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 for a minimal number of samples</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>smallestGroupSize <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">counts</span>(dds) <span class="sc">&gt;=</span> <span class="dv">10</span>) <span class="sc">&gt;=</span> smallestGroupSize</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(keep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## One cortex sample is weird: let's remove it</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> dds[, <span class="fu">colnames</span>(dds) <span class="sc">!=</span> <span class="st">"ctx962"</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Filter lowly expressed genes We keep only rows that have a count of at least</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="do">## 10 for a minimal number of samples</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>smallestGroupSize <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">counts</span>(dds) <span class="sc">&gt;=</span> <span class="dv">10</span>) <span class="sc">&gt;=</span> smallestGroupSize</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(keep)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>keep
 FALSE  TRUE 
 30107 25314 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> dds[keep, ]</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Update vst object</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>vst <span class="ot">&lt;-</span> <span class="fu">varianceStabilizingTransformation</span>(dds, <span class="at">blind =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">meanSdPlot</span>(<span class="fu">assay</span>(vst), <span class="at">ranks =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> dds[keep, ]</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Update vst object</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>vst <span class="ot">&lt;-</span> <span class="fu">varianceStabilizingTransformation</span>(dds, <span class="at">blind =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">meanSdPlot</span>(<span class="fu">assay</span>(vst), <span class="at">ranks =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid" width="672"></p>
+<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotDensities</span>(<span class="fu">assay</span>(vst), <span class="at">group =</span> dds<span class="sc">$</span>group, <span class="at">col =</span> myPalette, <span class="at">legend =</span> <span class="st">"topright"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotDensities</span>(<span class="fu">assay</span>(vst), <span class="at">group =</span> dds<span class="sc">$</span>group, <span class="at">col =</span> myPalette, <span class="at">legend =</span> <span class="st">"topright"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-3-4.png" class="img-fluid" width="672"></p>
+<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-2-4.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotDensities</span>(<span class="fu">assay</span>(vst), <span class="at">group =</span> dds<span class="sc">$</span>tissue, <span class="at">col =</span> myPalette, <span class="at">legend =</span> <span class="st">"topright"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotDensities</span>(<span class="fu">assay</span>(vst), <span class="at">group =</span> dds<span class="sc">$</span>tissue, <span class="at">col =</span> myPalette, <span class="at">legend =</span> <span class="st">"topright"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-3-5.png" class="img-fluid" width="672"></p>
+<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-2-5.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -590,28 +231,28 @@ FALSE  TRUE
 <section id="expression-of-xist-gene" class="level2">
 <h2 class="anchored" data-anchor-id="expression-of-xist-gene">Expression of <em>Xist</em> gene</h2>
 <p>Xist is a lncRNA regulating the X-chromosome inactivation process in mammals, used to equalize the dosage of X-linked genes between female (XX) and male (XY). It should thus be expressed only in female samples</p>
-<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-4_736cc276a5340a425ef64abcbfbea89f">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst)[<span class="fu">grep</span>(<span class="st">"Xist"</span>, <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name), , drop <span class="ot">=</span> <span class="cn">FALSE</span>] <span class="sc">|&gt;</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">colour =</span> tissue, <span class="at">group =</span> tissue)) <span class="sc">+</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-3_07b067ca814b5a4e16698281e4a7eb85">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst)[<span class="fu">grep</span>(<span class="st">"Xist"</span>, <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name), , drop <span class="ot">=</span> <span class="cn">FALSE</span>] <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">colour =</span> tissue, <span class="at">group =</span> tissue)) <span class="sc">+</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
 <section id="expression-of-y-chromosome-genes" class="level2">
 <h2 class="anchored" data-anchor-id="expression-of-y-chromosome-genes">Expression of Y-chromosome genes</h2>
-<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-5_2c28141f97bc9960d3670b61e44fce2f">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Chromosome information</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(<span class="fu">as.data.frame</span>(<span class="fu">rowRanges</span>(dds))<span class="sc">$</span>seqnames)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-4_6cce9cbd774e227011899cfd348ab579">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Chromosome information</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(<span class="fu">as.data.frame</span>(<span class="fu">rowRanges</span>(dds))<span class="sc">$</span>seqnames)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "chr1"       "chr2"       "chr3"       "chr4"       "chr5"      
  [6] "chr6"       "chr7"       "chr8"       "chr9"       "chr10"     
@@ -623,32 +264,32 @@ FALSE  TRUE
 [36] "JH584292.1" "JH584293.1" "JH584294.1" "JH584295.1" "JH584296.1"
 [41] "JH584297.1" "JH584298.1" "JH584299.1" "JH584303.1" "JH584304.1"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="do">## How many genes are left in our dataset after filtering?</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">as.data.frame</span>(<span class="fu">rowRanges</span>(dds))<span class="sc">$</span>seqnames <span class="sc">==</span> <span class="st">"chrY"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="do">## How many genes are left in our dataset after filtering?</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">as.data.frame</span>(<span class="fu">rowRanges</span>(dds))<span class="sc">$</span>seqnames <span class="sc">==</span> <span class="st">"chrY"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 FALSE  TRUE 
 25300    14 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst)[<span class="fu">as.data.frame</span>(<span class="fu">rowRanges</span>(dds))<span class="sc">$</span>seqnames <span class="sc">==</span> <span class="st">"chrY"</span>, , drop <span class="ot">=</span> <span class="cn">FALSE</span>] <span class="sc">|&gt;</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">colour =</span> tissue, <span class="at">group =</span> tissue)) <span class="sc">+</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst)[<span class="fu">as.data.frame</span>(<span class="fu">rowRanges</span>(dds))<span class="sc">$</span>seqnames <span class="sc">==</span> <span class="st">"chrY"</span>, , drop <span class="ot">=</span> <span class="cn">FALSE</span>] <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">colour =</span> tissue, <span class="at">group =</span> tissue)) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p><img src="round-help-button.png" class="img-fluid"> What do you observe? What is going on for some genes? (e.g., <em>Gm20775</em>)</p>
 <p><img src="elemental-tip.png" class="img-fluid"> Bigwig files are available through recount3 for some of the samples and allow to visualize the read coverage (for example on the Y-chromosome) on a genome browser. For example you can provide these links to the UCSC genome browser directly:</p>
-<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-6_2b95c836be409408efbde98ab9bd80b0">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(dds<span class="sc">$</span>BigWigURL)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-5_bc40061f9f748842af51d8026122db3c">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(dds<span class="sc">$</span>BigWigURL)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "http://duffel.rail.bio/recount3/mouse/data_sources/sra/base_sums/56/SRP218156/14/sra.base_sums.SRP218156_SRR9956114.ALL.bw"
 [2] "http://duffel.rail.bio/recount3/mouse/data_sources/sra/base_sums/56/SRP218156/15/sra.base_sums.SRP218156_SRR9956115.ALL.bw"
@@ -662,22 +303,22 @@ FALSE  TRUE
 <section id="principal-component-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="principal-component-analysis">Principal component analysis</h2>
 <div class="cell" data-hash="hands_on_DESeq2_cache/html/pca_c66f637aa55b0ca7e6c1cca88ba7e7c1">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="do">## PCA on top 500 most variable genes</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotPCA</span>(vst, <span class="at">ntop =</span> <span class="dv">500</span>, <span class="at">intgroup =</span> <span class="fu">c</span>(<span class="st">"tissue"</span>, <span class="st">"treatment"</span>), <span class="at">pcsToUse =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">+</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## PCA on top 500 most variable genes</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotPCA</span>(vst, <span class="at">ntop =</span> <span class="dv">500</span>, <span class="at">intgroup =</span> <span class="fu">c</span>(<span class="st">"tissue"</span>, <span class="st">"treatment"</span>), <span class="at">pcsToUse =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="hands_on_DESeq2_files/figure-html/pca-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Which sample metadata associate to which PCs?  Let's use the</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="do">## getExplanatoryPCs from scater package, which takes as input a</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="do">## SingleCellExperiment object containing dimensionality reduction results</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>select <span class="ot">&lt;-</span> <span class="fu">order</span>(<span class="fu">rowVars</span>(<span class="fu">assay</span>(vst)))[<span class="fu">seq_len</span>(<span class="dv">500</span>)]</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>pca1 <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(<span class="fu">t</span>(<span class="fu">assay</span>(vst)[select, ]))</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>sce <span class="ot">&lt;-</span> <span class="fu">SingleCellExperiment</span>(<span class="at">assays =</span> <span class="fu">list</span>(<span class="at">logcounts =</span> <span class="fu">assay</span>(vst)), <span class="at">reducedDims =</span> <span class="fu">list</span>(<span class="at">PCA =</span> pca1<span class="sc">$</span>x),</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">colData =</span> <span class="fu">colData</span>(dds))</span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>percentVar <span class="ot">&lt;-</span> <span class="fu">getExplanatoryPCs</span>(sce, <span class="at">n_dimred =</span> <span class="dv">10</span>, <span class="at">dimred =</span> <span class="st">"PCA"</span>, <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"sex"</span>,</span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"treatment"</span>, <span class="st">"tissue"</span>, <span class="st">"mouse"</span>))</span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>percentVar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Which sample metadata associate to which PCs?  Let's use the</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="do">## getExplanatoryPCs from scater package, which takes as input a</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="do">## SingleCellExperiment object containing dimensionality reduction results</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>select <span class="ot">&lt;-</span> <span class="fu">order</span>(<span class="fu">rowVars</span>(<span class="fu">assay</span>(vst)))[<span class="fu">seq_len</span>(<span class="dv">500</span>)]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>pca1 <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(<span class="fu">t</span>(<span class="fu">assay</span>(vst)[select, ]))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>sce <span class="ot">&lt;-</span> <span class="fu">SingleCellExperiment</span>(<span class="at">assays =</span> <span class="fu">list</span>(<span class="at">logcounts =</span> <span class="fu">assay</span>(vst)), <span class="at">reducedDims =</span> <span class="fu">list</span>(<span class="at">PCA =</span> pca1<span class="sc">$</span>x),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">colData =</span> <span class="fu">colData</span>(dds))</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>percentVar <span class="ot">&lt;-</span> <span class="fu">getExplanatoryPCs</span>(sce, <span class="at">n_dimred =</span> <span class="dv">10</span>, <span class="at">dimred =</span> <span class="st">"PCA"</span>, <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"sex"</span>,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"treatment"</span>, <span class="st">"tissue"</span>, <span class="st">"mouse"</span>))</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>percentVar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             sex    treatment      tissue     mouse
 PC1   0.08917004 9.422612e-04 97.92539861  1.381346
@@ -691,18 +332,18 @@ PC8   1.86300352 2.851629e+00  0.53194722 45.755141
 PC9   1.95180942 1.819178e+01  0.08900467 58.206626
 PC10  0.05528160 4.696096e-02  0.34506755 29.943165</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotExplanatoryPCs</span>(percentVar<span class="sc">/</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotExplanatoryPCs</span>(percentVar<span class="sc">/</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="hands_on_DESeq2_files/figure-html/pca-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p><img src="round-help-button.png" class="img-fluid"> To which principal components contribute which factors? Does this corresponds to the expectations? What do you conclude on the relative effect size of different factors?</p>
-<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-7_7d2134380feadafc8290295506ebe390">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualize some of these associations, for example sex with PC3</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotPCA</span>(vst, <span class="at">ntop =</span> <span class="dv">500</span>, <span class="at">intgroup =</span> <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"treatment"</span>), <span class="at">pcsToUse =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">+</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-6_4357f9d4e3d145a507556c360163afbb">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Visualize some of these associations, for example sex with PC3</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotPCA</span>(vst, <span class="at">ntop =</span> <span class="dv">500</span>, <span class="at">intgroup =</span> <span class="fu">c</span>(<span class="st">"sex"</span>, <span class="st">"treatment"</span>), <span class="at">pcsToUse =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -710,20 +351,20 @@ PC10  0.05528160 4.696096e-02  0.34506755 29.943165</code></pre>
 <section id="differential-expression-analysis" class="level1">
 <h1>Differential expression analysis</h1>
 <div class="cell" data-hash="hands_on_DESeq2_cache/html/de_analysis_bb675777b62cf4b5bc2d1c9797ee1ef7">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Update design for DE analysis</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">design</span>(dds) <span class="ot">&lt;-</span> <span class="er">~</span><span class="dv">0</span> <span class="sc">+</span> group <span class="sc">+</span> tissue</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Launch differential expression analysis</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="fu">resultsNames</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Update design for DE analysis</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">design</span>(dds) <span class="ot">&lt;-</span> <span class="er">~</span><span class="dv">0</span> <span class="sc">+</span> group <span class="sc">+</span> tissue</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Launch differential expression analysis</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">resultsNames</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "groupVehicle.female"   "groupTamoxifen.female" "groupVehicle.male"    
 [4] "groupTamoxifen.male"   "tissueHippocampus"     "tissueRetina"         </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Extract results for the different contrasts - Direct male vs. female</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="do">## comparison (in controls only) #######################</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"group"</span>, <span class="st">"Vehicle.male"</span>, <span class="st">"Vehicle.female"</span>))</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Extract results for the different contrasts - Direct male vs. female</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="do">## comparison (in controls only) #######################</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"group"</span>, <span class="st">"Vehicle.male"</span>, <span class="st">"Vehicle.female"</span>))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 out of 25314 with nonzero total read count
@@ -736,8 +377,8 @@ low counts [2]     : 5392, 21%
 [1] see 'cooksCutoff' argument of ?results
 [2] see 'independentFiltering' argument of ?results</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">cbind</span>(res, <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name)</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">cbind</span>(res, <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>DataFrame with 10 rows and 7 columns
                      baseMean log2FoldChange     lfcSE      stat       pvalue
@@ -765,31 +406,31 @@ ENSMUSG00000098743  1.43613e-56                Gm27927
 ENSMUSG00000099312  3.34686e-46                Gm27733
 ENSMUSG00000098262  3.10469e-38                Gm27520</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="do">## For visualization: since we account for tissue, it makes sense to correct</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="do">## the expression values for this effect</span></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span>group, <span class="fu">colData</span>(vst))</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">removeBatchEffect</span>(<span class="fu">assay</span>(vst), <span class="at">batch =</span> vst<span class="sc">$</span>tissue, <span class="at">design =</span> mm)</span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>vst.corrected <span class="ot">&lt;-</span> vst</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="fu">assay</span>(vst.corrected) <span class="ot">&lt;-</span> mat</span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst.corrected)[<span class="fu">row.names</span>(<span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)), ] <span class="sc">|&gt;</span></span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
-<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst.corrected)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
-<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">group =</span> tissue, <span class="at">col =</span> tissue)) <span class="sc">+</span></span>
-<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
-<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
-<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="do">## For visualization: since we account for tissue, it makes sense to correct</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="do">## the expression values for this effect</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span>group, <span class="fu">colData</span>(vst))</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">removeBatchEffect</span>(<span class="fu">assay</span>(vst), <span class="at">batch =</span> vst<span class="sc">$</span>tissue, <span class="at">design =</span> mm)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>vst.corrected <span class="ot">&lt;-</span> vst</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">assay</span>(vst.corrected) <span class="ot">&lt;-</span> mat</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst.corrected)[<span class="fu">row.names</span>(<span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)), ] <span class="sc">|&gt;</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst.corrected)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">group =</span> tissue, <span class="at">col =</span> tissue)) <span class="sc">+</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="hands_on_DESeq2_files/figure-html/de_analysis-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># - effect of Tamoxifen treatment in males</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co"># #####################################</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"group"</span>, <span class="st">"Tamoxifen.male"</span>, <span class="st">"Vehicle.male"</span>))</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># - effect of Tamoxifen treatment in males</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># #####################################</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"group"</span>, <span class="st">"Tamoxifen.male"</span>, <span class="st">"Vehicle.male"</span>))</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 out of 25314 with nonzero total read count
@@ -802,8 +443,8 @@ low counts [2]     : 7839, 31%
 [1] see 'cooksCutoff' argument of ?results
 [2] see 'independentFiltering' argument of ?results</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">cbind</span>(res, <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name)</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">cbind</span>(res, <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>DataFrame with 10 rows and 7 columns
                     baseMean log2FoldChange     lfcSE      stat      pvalue
@@ -831,24 +472,24 @@ ENSMUSG00000021311 1.52178e-03                    Mtr
 ENSMUSG00000037112 2.91856e-03                   Sik2
 ENSMUSG00000008090 2.91856e-03                 Fgfrl1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst.corrected)[<span class="fu">row.names</span>(<span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)), ] <span class="sc">|&gt;</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst.corrected)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">group =</span> tissue, <span class="at">col =</span> tissue)) <span class="sc">+</span></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst.corrected)[<span class="fu">row.names</span>(<span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)), ] <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst.corrected)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">group =</span> tissue, <span class="at">col =</span> tissue)) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="hands_on_DESeq2_files/figure-html/de_analysis-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># - effect of Tamoxifen treatment in females</span></span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ###################################</span></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"group"</span>, <span class="st">"Tamoxifen.female"</span>, <span class="st">"Vehicle.female"</span>))</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># - effect of Tamoxifen treatment in females</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ###################################</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"group"</span>, <span class="st">"Tamoxifen.female"</span>, <span class="st">"Vehicle.female"</span>))</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 out of 25314 with nonzero total read count
@@ -861,8 +502,8 @@ low counts [2]     : 9310, 37%
 [1] see 'cooksCutoff' argument of ?results
 [2] see 'independentFiltering' argument of ?results</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">cbind</span>(res, <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name)</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">cbind</span>(res, <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>DataFrame with 10 rows and 7 columns
                     baseMean log2FoldChange     lfcSE      stat      pvalue
@@ -890,26 +531,26 @@ ENSMUSG00000035877 1.70143e-07                   Zhx3
 ENSMUSG00000037868 1.70143e-07                   Egr2
 ENSMUSG00000032846 1.70143e-07                 Zswim6</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst.corrected)[<span class="fu">row.names</span>(<span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)), ] <span class="sc">|&gt;</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst.corrected)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
-<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">group =</span> tissue, <span class="at">col =</span> tissue)) <span class="sc">+</span></span>
-<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
-<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
-<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst.corrected)[<span class="fu">row.names</span>(<span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)), ] <span class="sc">|&gt;</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst.corrected)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">group =</span> tissue, <span class="at">col =</span> tissue)) <span class="sc">+</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="hands_on_DESeq2_files/figure-html/de_analysis-3.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p><img src="round-help-button.png" class="img-fluid"> Do the number of DE genes correspond to your expectations from the PCA? What would you conclude on the difference of Tamoxifen effects in male and female? Are some of these genes described in the original paper?</p>
-<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-8_83503c1ec4a97d57eaee325646507e07">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="do">## See Fig 4e and f</span></span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(res[<span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Egr2"</span>, <span class="st">"Fos"</span>, <span class="st">"Dusp1"</span>, <span class="st">"Nr4a1"</span>, <span class="st">"Sik1"</span>,</span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Arc"</span>, <span class="st">"Egr1"</span>, <span class="st">"Plcl2"</span>, <span class="st">"Galnt9"</span>, <span class="st">"Per2"</span>, <span class="st">"Zbtb16"</span>, <span class="st">"Map3k13"</span>, <span class="st">"Banp"</span>), ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-7_8fc244b61afbae3e2249604ae2fd0167">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="do">## See Fig 4e and f</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(res[<span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Egr2"</span>, <span class="st">"Fos"</span>, <span class="st">"Dusp1"</span>, <span class="st">"Nr4a1"</span>, <span class="st">"Sik1"</span>,</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Arc"</span>, <span class="st">"Egr1"</span>, <span class="st">"Plcl2"</span>, <span class="st">"Galnt9"</span>, <span class="st">"Per2"</span>, <span class="st">"Zbtb16"</span>, <span class="st">"Map3k13"</span>, <span class="st">"Banp"</span>), ])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    baseMean log2FoldChange      lfcSE       stat       pvalue
 ENSMUSG00000055866 1502.2350     -0.4609004 0.08358010  -5.514476 3.498206e-08
@@ -944,18 +585,18 @@ ENSMUSG00000066687 2.923776e-10                 Zbtb16</code></pre>
 <section id="extracting-the-interaction-term" class="level2">
 <h2 class="anchored" data-anchor-id="extracting-the-interaction-term">Extracting the interaction term</h2>
 <p>We would like to identify genes reacting differently to Tamoxifen treatment in male and female. We need to update the design of our DESe2 object. See <code>?DESeq2::results</code> explaining how to extract this effect (Example 3)</p>
-<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-9_04d8f8a30e65869b912ca799878ce854">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">design</span>(dds) <span class="ot">&lt;-</span> <span class="er">~</span>tissue <span class="sc">+</span> treatment <span class="sc">*</span> sex</span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a><span class="fu">resultsNames</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-8_0eefb3188ee535775a854a3bf0adaa6d">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">design</span>(dds) <span class="ot">&lt;-</span> <span class="er">~</span>tissue <span class="sc">+</span> treatment <span class="sc">*</span> sex</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">resultsNames</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Intercept"                      "tissue_Hippocampus_vs_Cortex"  
 [3] "tissue_Retina_vs_Cortex"        "treatment_Tamoxifen_vs_Vehicle"
 [5] "sex_male_vs_female"             "treatmentTamoxifen.sexmale"    </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Select last coefficient</span></span>
-<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">name =</span> <span class="st">"treatmentTamoxifen.sexmale"</span>)</span>
-<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Select last coefficient</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">name =</span> <span class="st">"treatmentTamoxifen.sexmale"</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 out of 25314 with nonzero total read count
@@ -968,8 +609,8 @@ low counts [2]     : 0, 0%
 [1] see 'cooksCutoff' argument of ?results
 [2] see 'independentFiltering' argument of ?results</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">cbind</span>(res, <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name)</span>
-<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">cbind</span>(res, <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_name)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>DataFrame with 10 rows and 7 columns
                      baseMean log2FoldChange     lfcSE      stat      pvalue
@@ -997,34 +638,34 @@ ENSMUSG00000032846 3.32874e-01                 Zswim6
 ENSMUSG00000025386 4.53110e-01                  Pde6g
 ENSMUSG00000031431 7.24782e-01                Tsc22d3</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst.corrected)[<span class="fu">row.names</span>(<span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">3</span>)), ] <span class="sc">|&gt;</span></span>
-<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
-<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
-<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
-<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst.corrected)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
-<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">group =</span> tissue, <span class="at">col =</span> tissue)) <span class="sc">+</span></span>
-<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
-<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
-<span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst.corrected)[<span class="fu">row.names</span>(<span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">3</span>)), ] <span class="sc">|&gt;</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst.corrected)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">group =</span> tissue, <span class="at">col =</span> tissue)) <span class="sc">+</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Looking using uncorrected expression levels</span></span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst)[<span class="fu">row.names</span>(<span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">3</span>)), ] <span class="sc">|&gt;</span></span>
-<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
-<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
-<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
-<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
-<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">group =</span> tissue, <span class="at">col =</span> tissue)) <span class="sc">+</span></span>
-<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
-<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
-<span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Looking using uncorrected expression levels</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">assay</span>(vst)[<span class="fu">row.names</span>(<span class="fu">head</span>(res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue), ], <span class="at">n =</span> <span class="dv">3</span>)), ] <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="cn">NA</span>) <span class="sc">|&gt;</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rownames_to_column</span>() <span class="sc">|&gt;</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">Gene =</span> rowname) <span class="sc">|&gt;</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">colnames</span>(<span class="fu">assay</span>(vst)), <span class="at">names_to =</span> <span class="st">"Sample"</span>, <span class="at">values_to =</span> <span class="st">"Normalized expression"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">colData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Sample"</span> <span class="sc">==</span> <span class="st">"sra.sample_title"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(<span class="at">y =</span> <span class="fu">as_tibble</span>(<span class="fu">rowData</span>(dds)), <span class="at">by =</span> <span class="fu">join_by</span>(<span class="st">"Gene"</span> <span class="sc">==</span> <span class="st">"gene_id"</span>))</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> <span class="st">`</span><span class="at">Normalized expression</span><span class="st">`</span>, <span class="at">group =</span> tissue, <span class="at">col =</span> tissue)) <span class="sc">+</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>gene_name, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">5</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="fl">0.2</span>),</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> myPalette[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>,</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid" width="672"></p>
+<p><img src="hands_on_DESeq2_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p><img src="round-help-button.png" class="img-fluid"> What do you think about these results? Are these genes described in the original paper? How would you describe the behavior of these genes in (well chosen) simple words?</p>
@@ -1033,32 +674,32 @@ ENSMUSG00000031431 7.24782e-01                Tsc22d3</code></pre>
 <section id="gsea" class="level1">
 <h1>GSEA</h1>
 <p>It is possible that we detect few significant genes for the interaction but that some trends are visible collectively at the gene set level</p>
-<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-10_9014b427dcb452e761b134c736243a2f">
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>GOmapping <span class="ot">&lt;-</span> AnnotationDbi<span class="sc">::</span><span class="fu">select</span>(org.Mm.eg.db, <span class="at">keys =</span> <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_id, <span class="at">keytype =</span> <span class="st">"ENSEMBL"</span>,</span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"GOALL"</span>, <span class="st">"EVIDENCEALL"</span>, <span class="st">"ONTOLOGYALL"</span>))</span>
-<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Transform to list</span></span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>GOmapping <span class="ot">&lt;-</span> <span class="fu">tapply</span>(GOmapping<span class="sc">$</span>ENSEMBL, <span class="fu">list</span>(GOmapping<span class="sc">$</span>GOALL), unique)</span>
-<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Filter gene sets smaller than 10 genes, and gene sets larger than 500 genes</span></span>
-<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>GOmapping <span class="ot">&lt;-</span> GOmapping[<span class="fu">sapply</span>(GOmapping, length) <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> <span class="fu">sapply</span>(GOmapping, length) <span class="sc">&lt;</span></span>
-<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">500</span>]</span>
-<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Run fastGSEA</span></span>
-<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>ranks <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(<span class="fu">setNames</span>(res<span class="sc">$</span>log2FoldChange, <span class="at">nm =</span> <span class="fu">row.names</span>(res)))</span>
-<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>fgseaRes <span class="ot">&lt;-</span> <span class="fu">fgsea</span>(<span class="at">pathways =</span> GOmapping, <span class="at">stats =</span> ranks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="hands_on_DESeq2_cache/html/unnamed-chunk-9_98448b98aae8a914dee610402edd2c27">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>GOmapping <span class="ot">&lt;-</span> AnnotationDbi<span class="sc">::</span><span class="fu">select</span>(org.Mm.eg.db, <span class="at">keys =</span> <span class="fu">rowData</span>(dds)<span class="sc">$</span>gene_id, <span class="at">keytype =</span> <span class="st">"ENSEMBL"</span>,</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"GOALL"</span>, <span class="st">"EVIDENCEALL"</span>, <span class="st">"ONTOLOGYALL"</span>))</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Transform to list</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>GOmapping <span class="ot">&lt;-</span> <span class="fu">tapply</span>(GOmapping<span class="sc">$</span>ENSEMBL, <span class="fu">list</span>(GOmapping<span class="sc">$</span>GOALL), unique)</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Filter gene sets smaller than 10 genes, and gene sets larger than 500 genes</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>GOmapping <span class="ot">&lt;-</span> GOmapping[<span class="fu">sapply</span>(GOmapping, length) <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> <span class="fu">sapply</span>(GOmapping, length) <span class="sc">&lt;</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">500</span>]</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Run fastGSEA</span></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>ranks <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(<span class="fu">setNames</span>(res<span class="sc">$</span>log2FoldChange, <span class="at">nm =</span> <span class="fu">row.names</span>(res)))</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>fgseaRes <span class="ot">&lt;-</span> <span class="fu">fgsea</span>(<span class="at">pathways =</span> GOmapping, <span class="at">stats =</span> ranks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in preparePathwaysAndStats(pathways, stats, minSize, maxSize, gseaParam, : There are ties in the preranked stats (0.03% of the list).
 The order of those tied genes will be arbitrary, which may produce unexpected results.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Add info on Gene Ontology terms</span></span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>fgseaRes <span class="ot">&lt;-</span> <span class="fu">cbind</span>(fgseaRes, AnnotationDbi<span class="sc">::</span><span class="fu">select</span>(GO.db, <span class="at">keys =</span> fgseaRes<span class="sc">$</span>pathway,</span>
-<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">keytype =</span> <span class="st">"GOID"</span>, <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"ONTOLOGY"</span>, <span class="st">"TERM"</span>)))  <span class="co">#, 'DEFINITION')))</span></span>
-<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(fgseaRes<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Add info on Gene Ontology terms</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>fgseaRes <span class="ot">&lt;-</span> <span class="fu">cbind</span>(fgseaRes, AnnotationDbi<span class="sc">::</span><span class="fu">select</span>(GO.db, <span class="at">keys =</span> fgseaRes<span class="sc">$</span>pathway,</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">keytype =</span> <span class="st">"GOID"</span>, <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"ONTOLOGY"</span>, <span class="st">"TERM"</span>)))  <span class="co">#, 'DEFINITION')))</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(fgseaRes<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 FALSE  TRUE 
  8192     9 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(fgseaRes[<span class="fu">order</span>(fgseaRes<span class="sc">$</span>pval), ], <span class="at">n =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(fgseaRes[<span class="fu">order</span>(fgseaRes<span class="sc">$</span>pval), ], <span class="at">n =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       pathway         pval         padj   log2err         ES       NES size
  1: GO:0002088 3.185287e-12 2.612254e-08 0.8986712  0.8614961  2.614617   87
