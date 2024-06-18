@@ -357,8 +357,8 @@ ggplot(df, aes(x=group, y=`Normalized expression`, group=tissue, col=tissue)) +
 data.frame(res[rowData(dds)$gene_name %in% c("Egr2", "Fos", "Dusp1", "Nr4a1", "Sik1", "Arc", "Egr1", "Plcl2", "Galnt9", "Per2", "Zbtb16", "Map3k13", "Banp"), ])
 ```
 
-
 ## Extracting the interaction term
+
 We would like to identify genes reacting differently to Tamoxifen treatment in male and female. We need to update the design of our DESe2 object. See `?DESeq2::results` explaining how to extract this effect (Example 3)
 
 ```{r}
@@ -403,7 +403,7 @@ ggplot(df, aes(x=group, y=`Normalized expression`, group=tissue, col=tissue)) +
   theme(axis.text.x = element_text(size=10, angle = 90, hjust = 1, vjust = 0.5))
 ```
 
-![](round-help-button.png) What do you think about these results? Are these genes described in the original paper? How would you describe the behavior of these genes in (well chosen) simple words? 
+![](round-help-button.png) What do you think about these results? Are these genes described in the original paper? How would you describe the behavior of these genes in (well chosen) simple words?
 
 # GSEA
 

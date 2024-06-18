@@ -45,6 +45,7 @@ library(here)
 
 library(recount3)
 library(SummarizedExperiment)
+library(scuttle)
 library(edgeR)
 library(DESeq2)
 
@@ -69,7 +70,10 @@ all_projects <- available_projects(organism = "mouse")
 selected <- all_projects |> subset(project == "SRP218156")
 ## Create a RangedSummarizedExperiment object at the gene level
 rse_gene <- create_rse(project_info = selected)
+```
 
+# Examine RangedSummarizedExperiment object
+```{r}
 ## The recount project records the sum of the base level coverage for each gene. These raw counts have to be transformed to "classical" read-counts to be processed by standard DE analysis tools 
 assayNames(rse_gene)
 assay(rse_gene, "counts") <- transform_counts(rse_gene)
@@ -97,7 +101,10 @@ table(rse_gene$sra.sample_title)
 rse_gene <- aggregateAcrossCells(rse_gene, 
                                  ids = rse_gene$sra.sample_title, 
                                  statistics = "sum") 
+```
 
+# Add metadata columns
+```{r}
 ## Simplify metadata columns of interest by parsing "sra.sample_attributes"
 rse_gene$sex <- factor(strsplit2(rse_gene$sra.sample_attributes, split = "\\|")[,2])
 levels(rse_gene$sex) <- gsub("Sex;;", "", levels(rse_gene$sex))
@@ -114,332 +121,22 @@ rse_gene$treatment <- relevel(rse_gene$treatment, ref = "Vehicle")
 ## From the methods it seems that the 3 tissues were extracted from the same mouse
 rse_gene$mouse <- factor(gsub("ctx|ret", "", rse_gene$sra.sample_title))
 
+## Add grouping variable (grouping 2 factors together, will be useful later) and order levels in a logical way
+rse_gene$group <- factor(paste0(rse_gene$treatment, ".", rse_gene$sex), levels=c("Vehicle.female", "Tamoxifen.female", "Vehicle.male", "Tamoxifen.male"))
+
 ## Overview of experiment design
 dim(rse_gene) 
 table(rse_gene$sex, rse_gene$treatment, rse_gene$tissue) 
+```
 
-
-## Convert to DGEList object
+# Convert to DGEList object
+```{r}
 dge <- SE2DGEList(rse_gene)
-
-
-
+saveRDS(dge, "DGEList.rds")
 ```
 
-# Gene filtering
-
+# Convert to DESeqDataSet object
 ```{r}
-
-## Visualize distribution before filtering (protein-coding genes only)
-plotDensities(edgeR::cpm(dge, log = T)[dge$genes$gene_type %in% "protein_coding", ], 
-              group=dge$samples$tissue, 
-              col = myPalette, 
-              legend="topright")
-
-## One cortex sample is weird: let's remove it
-dge <- dge[, colnames(dge) != "ctx962"]
-
-## Filter lowly expressed genes
-keep <- filterByExpr(dge, 
-                     group = dge$samples$group)
-table(keep)
-## subset DGEList, while updating total counts
-dge <- dge[keep, , keep.lib.sizes=FALSE] 
-## TMM normalization
-dge <- calcNormFactors(dge) 
-
-## Calculate normalized log2(CPM) values
-log2cpm <- edgeR::cpm(dge, 
-                      log=TRUE, 
-                      normalized.lib.sizes=TRUE)
-plotDensities(log2cpm, 
-              group=dge$samples$group, 
-              col=myPalette, 
-              legend="topright")
-plotDensities(log2cpm, 
-              group=dge$samples$tissue, 
-              col=myPalette, 
-              legend="topright")
+dds <- DESeqDataSet(rse_gene, design = ~ 1) 
+saveRDS(dds, "DESeqDataSet.rds")
 ```
-
-# QC checks
-
-## Expression of *Xist* gene
-
-Xist is a lncRNA regulating the X-chromosome inactivation process in mammals, used to equalize the dosage of X-linked genes between female (XX) and male (XY). It should thus be expressed only in female samples
-
-
-```{r}
-df <- log2cpm[grep("Xist", dge$genes$gene_name), , drop=FALSE] |>
-  as_tibble(rownames = NA) |> 
-  rownames_to_column() |>
-  dplyr::rename(Gene = rowname) |>
-  pivot_longer(cols= colnames(log2cpm), 
-               names_to = "Sample",
-               values_to = "log2CPM") |> 
-  left_join(y=as_tibble(dge$samples), by = join_by("Sample" == "sra.sample_title")) |>
-  left_join(y=as_tibble(dge$genes), by=join_by("Gene" == "gene_id"))
-ggplot(df, aes(x=group, y=log2CPM, colour=tissue, group=tissue)) +
-  facet_wrap( ~ gene_name, scales = "free_y", ncol = 1) +
-  geom_point(position = position_dodge(0.2), alpha = .8, size=2) +
-  scale_colour_manual(values=myPalette[1:3]) +
-  theme(axis.text.x = element_text(size=10, angle = 90, hjust = 1, vjust = 0.5))
-```
-
-## Expression of Y-chromosome genes
-
-```{r}
-## Chromosome information
-levels(dge$genes$seqnames)
-## How many genes are left in our dataset after filtering?
-table(dge$genes$seqnames == "chrY")
-
-df <- log2cpm[dge$genes$seqnames == "chrY", , drop=FALSE] |>
-  as_tibble(rownames = NA) |> 
-  rownames_to_column() |>
-  dplyr::rename(Gene = rowname) |>
-  pivot_longer(cols= colnames(log2cpm), 
-               names_to = "Sample",
-               values_to = "log2CPM") |> 
-  left_join(y=as_tibble(dge$samples), by = join_by("Sample" == "sra.sample_title")) |>
-  left_join(y=as_tibble(dge$genes), by=join_by("Gene" == "gene_id"))
-ggplot(df, aes(x=group, y=log2CPM, colour=tissue, group=tissue)) +
-  facet_wrap( ~ gene_name, scales = "free_y", ncol = 4) +
-  geom_point(position = position_dodge(0.2), alpha = .8, size=2) +
-  scale_colour_manual(values=myPalette[1:3]) +
-  theme(axis.text.x = element_text(size=10, angle = 90, hjust = 1, vjust = 0.5))
-```
-
-![](round-help-button.png) What do you observe? What is going on for some genes? (e.g., *Gm20775*)
-
-![](elemental-tip.png) Bigwig files are available through recount3 for some of the samples and allow to visualize the read coverage (for example on the Y-chromosome) on a genome browser. For example you can provide these links to the UCSC genome browser directly:
-
-```{r}
-tail(dge$samples$BigWigURL)
-```
-
-## Principal component analysis
-
-```{r pca}
-## PCA on top 500 most variable genes
-iqrs <- apply(log2cpm, 1, IQR)
-sel <- iqrs >= sort(iqrs, decreasing = T)[500]
-pca1 <- prcomp(t(log2cpm[sel,]), scale = T)
-summary(pca1)$importance[, 1:10]
-plot(pca1)
-
-## Which sample metadata associate to which PCs?
-## Let's use the getExplanatoryPCs from scater package, which takes as input a SingleCellExperiment object containing dimensionality reduction results
-sce <- SingleCellExperiment(assays = list(logcounts=log2cpm),
-                            reducedDims = list(PCA=pca1$x),
-                            colData = dge$samples) 
-percentVar <- getExplanatoryPCs(sce, 
-                                n_dimred = 10,
-                                dimred = "PCA",
-                                variables = c("sex", "treatment", "tissue", "mouse"))
-percentVar
-plotExplanatoryPCs(percentVar/100) 
-```
-
-![](round-help-button.png) To which principal components contribute which factors? Does this corresponds to the expectations? What do you conclude on the relative effect size of different factors?
-
-```{r}
-## Visualize some of these associations, for example tissues with PCs 1 and 2, sex with PC3
-plot(pca1$x[, 1], pca1$x[, 2], 
-     pch=c(15:16)[dge$samples$treatment], 
-     col=myPalette[dge$samples$tissue])
-plot(pca1$x[, 2], pca1$x[, 3], 
-     pch=c(15:16)[dge$samples$treatment], 
-     col=myPalette[dge$samples$sex])
-```
-
-# Differential expression analysis
-
-```{r de_analysis}
-## Design matrix
-## We use an additive model accounting for tissue effect (which is not of main interest here)
-moma <- model.matrix(~ 0 + group + tissue, data=dge$samples) 
-colnames(moma) <- gsub("group", "", colnames(moma)) ## Easier to manipulate contrasts
-
-## Contrast matrix: 
-## - Direct male vs. female comparison (in controls only)
-## - effect of Tamoxifen treatment in each sex separately 
-## - interaction term to extract genes reacting differently to Tamoxifen treatment in male and female
-contrasts.matrix <- makeContrasts(
-  Male_vs_female = Vehicle.male - Vehicle.female, 
-  Tamoxifen_effet_male = Tamoxifen.male - Vehicle.male,
-  Tamoxifen_effet_female = Tamoxifen.female - Vehicle.female,
-  Interaction = (Tamoxifen.male - Vehicle.male) - (Tamoxifen.female - Vehicle.female),
-  levels=moma
-)
-
-## Run DE analysis
-v <- voom(dge, moma, plot=TRUE)
-fit <- lmFit(v, moma)
-fit2 <- contrasts.fit(fit, contrasts.matrix)
-fit2 <- eBayes(fit2)
-
-## Extract genes significant at FDR 10%
-de <- decideTests(fit2, p.value = 0.1) 
-apply(de, 2, table)
-
-## Top genes for each contrast
-topTable(fit2, coef="Male_vs_female", n=10, sort.by="P")
-topTable(fit2, coef="Tamoxifen_effet_male", n=10, sort.by="P")
-topTable(fit2, coef="Tamoxifen_effet_female", n=10, sort.by="P")
-topTable(fit2, coef="Interaction", n=10, sort.by="P") 
-```
-
-![](round-help-button.png) Do the number of DE genes correspond to your expectations from the PCA? What would you conclude on the difference of Tamoxifen effects in male and female?
-
-```{r}
-## Plot expression of top genes
-
-## Since we account for tissue, maybe it makes sense to correct the logCPM for this effect
-log2cpm.corrected <- removeBatchEffect(log2cpm, batch = dge$samples$tissue)
-
-## Sex differences, top 10 genes
-top <- topTable(fit2, coef="Male_vs_female", n=10, sort.by = "P") 
-df <- log2cpm.corrected[top$gene_id,] |>
-  as_tibble(rownames = NA) |> 
-  rownames_to_column() |>
-  dplyr::rename(Gene = rowname) |>
-  pivot_longer(cols= colnames(log2cpm.corrected), 
-               names_to = "Sample",
-               values_to = "log2CPM") |> 
-  left_join(y=as_tibble(dge$samples), by = join_by("Sample" == "sra.sample_title")) |>
-  left_join(y=as_tibble(dge$genes), by=join_by("Gene" == "gene_id"))
-ggplot(df, aes(x=group, y=log2CPM, group=tissue, col=tissue)) +
-  facet_wrap( ~ gene_name, scales = "free_y", ncol = 5) +
-  geom_point(position = position_dodge(0.2), alpha = .8, size=2) +
-  scale_colour_manual(values=myPalette[1:3]) +
-  theme(axis.text.x = element_text(size=10, angle = 90, hjust = 1, vjust = 0.5))
-```
-
-![](round-help-button.png) Which genes do you notice here? Try and plot the original logCPM values (uncorrected for tissue effects)
-
-```{r}
-top <- topTable(fit2, coef="Male_vs_female", n=Inf, sort.by = "P") 
-table(factor(top$seqname))
-```
-
-
-```{r}
-## Treatment in males, top 10 genes
-top <- topTable(fit2, coef="Tamoxifen_effet_male", n=10, sort.by = "P")
-df <- log2cpm.corrected[top$gene_id,] |>
-  as_tibble(rownames = NA) |> 
-  rownames_to_column() |>
-  dplyr::rename(Gene = rowname) |>
-  pivot_longer(cols= colnames(log2cpm.corrected), 
-               names_to = "Sample",
-               values_to = "log2CPM") |> 
-  left_join(y=as_tibble(dge$samples), by = join_by("Sample" == "sra.sample_title")) |>
-  left_join(y=as_tibble(dge$genes), by=join_by("Gene" == "gene_id"))
-ggplot(df, aes(x=group, y=log2CPM, group=tissue, col=tissue)) +
-  facet_wrap( ~ gene_name, scales = "free_y", ncol = 5) +
-  geom_point(position = position_dodge(0.2), alpha = .8, size=2) +
-  scale_colour_manual(values=myPalette[1:3]) +
-  theme(axis.text.x = element_text(size=10, angle = 90, hjust = 1, vjust = 0.5))
-
-## Treatment in females, top 10 genes
-top <- topTable(fit2, coef="Tamoxifen_effet_female", n=10, sort.by = "P")
-df <- log2cpm.corrected[top$gene_id,] |>
-  as_tibble(rownames = NA) |> 
-  rownames_to_column() |>
-  dplyr::rename(Gene = rowname) |>
-  pivot_longer(cols= colnames(log2cpm.corrected), 
-               names_to = "Sample",
-               values_to = "log2CPM") |> 
-  left_join(y=as_tibble(dge$samples), by = join_by("Sample" == "sra.sample_title")) |>
-  left_join(y=as_tibble(dge$genes), by=join_by("Gene" == "gene_id"))
-ggplot(df, aes(x=group, y=log2CPM, group=tissue, col=tissue)) +
-  facet_wrap( ~ gene_name, scales = "free_y", ncol = 5) +
-  geom_point(position = position_dodge(0.2), alpha = .8, size=2) +
-  scale_colour_manual(values=myPalette[1:3]) +
-  theme(axis.text.x = element_text(size=10, angle = 90, hjust = 1, vjust = 0.5))
-```
-
-![](round-help-button.png) What do you notice? Are some of these genes described in the original paper?
-
-```{r}
-## See Fig 4e and f
-top <- topTable(fit2, coef="Tamoxifen_effet_male", p.value=1, n=Inf, sort.by = "P")
-top[top$gene_name %in% c("Egr2", "Fos", "Dusp1", "Nr4a1", "Sik1", "Arc", "Egr1", "Plcl2", "Galnt9", "Per2", "Zbtb16", "Map3k13", "Banp"), ]
-
-top <- topTable(fit2, coef="Tamoxifen_effet_female", p.value=1, n=Inf, sort.by = "P")
-top[top$gene_name %in% c("Egr2", "Fos", "Dusp1", "Nr4a1", "Sik1", "Arc", "Egr1", "Plcl2", "Galnt9", "Per2", "Zbtb16", "Map3k13", "Banp"), ]
-```
-
-We will now look at the 2 genes reacting differently to Tamoxifen treatment in male and female
-```{r}
-top <- topTable(fit2, coef="Interaction", p.value=0.1, sort.by = "P")
-df <- log2cpm.corrected[top$gene_id,] |>
-  as_tibble(rownames = NA) |> 
-  rownames_to_column() |>
-  dplyr::rename(Gene = rowname) |>
-  pivot_longer(cols= colnames(log2cpm.corrected), 
-               names_to = "Sample",
-               values_to = "log2CPM") |> 
-  left_join(y=as_tibble(dge$samples), by = join_by("Sample" == "sra.sample_title")) |>
-  left_join(y=as_tibble(dge$genes), by=join_by("Gene" == "gene_id"))
-ggplot(df, aes(x=group, y=log2CPM, group=tissue, col=tissue)) +
-  facet_wrap( ~ gene_name, scales = "free_y", ncol = 5) +
-  geom_point(position = position_dodge(0.2), alpha = .8, size=2) +
-  scale_colour_manual(values=myPalette[1:3]) +
-  theme(axis.text.x = element_text(size=10, angle = 90, hjust = 1, vjust = 0.5))
-```
-
-![](round-help-button.png) How would you describe the behavior of these genes in (well chosen) simple words? Are these genes described in the original paper?
-
-# GSEA
-
-It is possible that we detect few significant genes for the interaction but that some trends are visible collectively at the gene set level
-
-```{r}
-GOmapping <- AnnotationDbi::select(org.Mm.eg.db, 
-                                   keys=dge$genes$gene_id, 
-                                   keytype = "ENSEMBL", 
-                                   columns=c("GOALL", "EVIDENCEALL", "ONTOLOGYALL")) 
-## Transform to list
-GOmapping <- tapply(GOmapping$ENSEMBL, list(GOmapping$GOALL), unique)
-
-## process and filter gene sets
-indx <- ids2indices(gene.sets=GOmapping, 
-                    identifiers=dge$genes$gene_id)
-## Filter gene sets smaller than 10 genes, and gene sets larger than 500 genes
-indx <- indx[sapply(indx, length) >= 10 & sapply(indx, length) < 500] 
-
-## Run CameraPR on the t-statistics
-top <- topTable(fit2, coef="Interaction", p.value=1, n=Inf, sort.by = "none")
-res_gsea <- cameraPR(statistic = top$t, 
-                     index=indx)
-
-## Add info on Gene Ontology terms
-res_gsea <- cbind(res_gsea, AnnotationDbi::select(GO.db, 
-                                                  keys=row.names(res_gsea), 
-                                                  keytype = "GOID", 
-                                                  columns=c("ONTOLOGY", "TERM"))) #, "DEFINITION")))
-table(res_gsea$FDR < 0.1)
-head(res_gsea, n=20)
-```
-
-# To finish
-
-- *"Interpretations of sex-related variation are not always commensurate with the story the data actually tell"* (Pape et al. 2024). How do you judge the interpretations of the results in the published paper?
-
-- Discuss potential limitations of the paper and the conclusion about the absence of Tamoxifen effect. 
-  - What is important to notice in the design of the experiment (tamoxifen treatment duration, batches, number of replicates, ...)? 
-  - Have a look at the results and materials and methods section: which analyses were made and how could they influence the results?
-
-- Limitations of our reanalysis: what could be improved if we had more time? 
-  - Try subsetting the dataset to one tissue as done by the authors. What do you notice? 
-
-- *"Sex is not a causal mechanism"* (Pape et al. 2024): follow-up on some DE genes and try to find which mechanism of action could explain their differential expression patterns.
-
-- Discuss what would be the next steps if that was your research project. Which experiments would you design next? How would you describe the results in a paper?
-  - You can also have a look at other related papers (e.g., https://www.nature.com/articles/s41586-022-04686-1, https://www.ahajournals.org/doi/10.1161/ATVBAHA.123.319922) 
-  - Or look at follow-up papers from the same authors (e.g., https://link.springer.com/article/10.1007/s12035-022-02860-0)
-  
-
-<sub>Icons taken from http://www.flaticon.com/</sub>
