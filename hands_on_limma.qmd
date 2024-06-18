@@ -28,7 +28,7 @@ In this hands-on session we would like to focus on a particular transcriptomic d
 
 Today's dataset is described in this paper ["Tamoxifen induction of Cre recombinase does not cause long-lasting or sexually divergent responses in the CNS epigenome or transcriptome: implications for the design of aging studies"](https://link.springer.com/article/10.1007/s11357-019-00090-2), and focuses on the potential side effects of Tamoxifen treatment, widely used to induce CreERT2 activity in transgenic mouse systems. Tamoxifen acts as an antagonist of estrogen receptor (ER), which could cause differences in response across sexes.
 
-![](Screenshot 2024-06-17 at 14.55.37.png)
+![](Screenshot%202024-06-17%20at%2014.55.37.png)
 
 # Loading data in R
 
@@ -51,11 +51,9 @@ library(RColorBrewer)
 myPalette <- c(brewer.pal(9, "Set1"), brewer.pal(8, "Set2"))
 
 ## DE analysis
-library(recount3)
 library(edgeR)
 library(SummarizedExperiment)
 library(scater)
-library(scuttle)
 
 ## Needed for GSEA
 library(org.Mm.eg.db)
@@ -66,77 +64,17 @@ saveRDS(devtools::session_info(), "session_info_limma.rds")
 
 # Read in data
 
-Raw and processed data are available from GEO [(accession GSE135752)](GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE135752)
+Raw and processed data are available from GEO [(accession GSE135752)](GEO:%20https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE135752)
 
-Today we will load directly the reprocessed data from the [recount3 project](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02533-6), a project which reprocessed uniformly thousands of bulk RNA-seq datasets from human and mouse. A [Bioconductor package](https://bioconductor.org/packages/3.17/bioc/html/recount3.html) allows to easily retrieve this data in the form of standard Bioconductor classes objects, such as `RangedSummarizedExperiment`.
-
-![](wrench-and-hammer.png) Connect to the [recount3 study explorer](https://jhubiostatistics.shinyapps.io/recount3-study-explorer/) Shiny app and search for our dataset (accession "SRP218156").
-
-![](elemental-tip.png) Another database of reprocessed datasets is GREIN, which provides interesting QC figures that could be helpful: http://www.ilincs.org/apps/grein/?gse=GSE135752
-
-
-```{r}
-## retrieve data frame listing all available projects in mouse
-all_projects <- available_projects(organism = "mouse")
-## Select our dataset
-selected <- all_projects |> subset(project == "SRP218156")
-## Create a RangedSummarizedExperiment object at the gene level
-rse_gene <- create_rse(project_info = selected)
-
-## The recount project records the sum of the base level coverage for each gene. These raw counts have to be transformed to "classical" read-counts to be processed by standard DE analysis tools 
-assayNames(rse_gene)
-assay(rse_gene, "counts") <- transform_counts(rse_gene)
-
-## Information about our reprocessed dataset
-metadata(rse_gene)
-## Gene metadata
-rowRanges(rse_gene)
-rowData(rse_gene)
-## Parse the Ensembl IDs (useful later)
-rowData(rse_gene)$gene_id <- gsub("\\.\\d+$", "", rowData(rse_gene)$gene_id)
-row.names(rse_gene) <- rowData(rse_gene)$gene_id
-
-## Sample metadata: a lot of columns!
-# colData(rse_gene)
-recount3_cols <- colnames(colData(rse_gene))
-## Group columns by source
-sort(table(gsub("\\..*", "", recount3_cols)))
-
-## The colData from SRA include the sample information. What does each column represent?
-head(colData(rse_gene)[, grep("sra", recount3_cols)])
-## This column corresponds to the sample name on GEO
-table(rse_gene$sra.sample_title) 
-## For some samples we have multiple runs (SRR IDs), let's sum their read counts
-rse_gene <- aggregateAcrossCells(rse_gene, 
-                                 ids = rse_gene$sra.sample_title, 
-                                 statistics = "sum") 
-
-## Simplify metadata columns of interest by parsing "sra.sample_attributes"
-rse_gene$sex <- factor(strsplit2(rse_gene$sra.sample_attributes, split = "\\|")[,2])
-levels(rse_gene$sex) <- gsub("Sex;;", "", levels(rse_gene$sex))
-
-rse_gene$tissue <- factor(strsplit2(rse_gene$sra.sample_attributes, split = "\\|")[,3])
-levels(rse_gene$tissue) <- gsub("source_name;;", "", levels(rse_gene$tissue))
-
-rse_gene$treatment <- factor(strsplit2(rse_gene$sra.sample_attributes, split = "\\|")[,4])
-levels(rse_gene$treatment) <- gsub("treatment;;", "", levels(rse_gene$treatment))
-levels(rse_gene$treatment) <- gsub("\\s\\(Sunflower\\sOil\\)", "", levels(rse_gene$treatment))
-## Relevel to have Vehicle as reference
-rse_gene$treatment <- relevel(rse_gene$treatment, ref = "Vehicle")
-
-## From the methods it seems that the 3 tissues were extracted from the same mouse
-rse_gene$mouse <- factor(gsub("ctx|ret", "", rse_gene$sra.sample_title))
-
-## Overview of experiment design
-dim(rse_gene) 
-table(rse_gene$sex, rse_gene$treatment, rse_gene$tissue) 
-```
+Today we will load directly the reprocessed data loaded from the [recount3 project](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02533-6), a project which reprocessed uniformly thousands of bulk RNA-seq datasets from human and mouse. See the `hands_on_recount3.qmd` script where we import and format the `DGEList` object.
 
 # Gene filtering
 
 ```{r}
-## Convert to DGEList object
-dge <- SE2DGEList(rse_gene)
+## Load DESeqDataSet object 
+dge <- readRDS("DGEList.rds") 
+## Or load directly from Github
+# dge <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/DGEList.rds"))
 
 ## Add grouping variable (grouping 2 factors together)
 ## (and order levels in a logical way)
@@ -179,7 +117,6 @@ plotDensities(log2cpm,
 ## Expression of *Xist* gene
 
 Xist is a lncRNA regulating the X-chromosome inactivation process in mammals, used to equalize the dosage of X-linked genes between female (XX) and male (XY). It should thus be expressed only in female samples
-
 
 ```{r}
 df <- log2cpm[grep("Xist", dge$genes$gene_name), , drop=FALSE] |>
@@ -335,7 +272,6 @@ top <- topTable(fit2, coef="Male_vs_female", n=Inf, sort.by = "P")
 table(factor(top$seqname))
 ```
 
-
 ```{r}
 ## Treatment in males, top 10 genes
 top <- topTable(fit2, coef="Tamoxifen_effet_male", n=10, sort.by = "P")
@@ -384,6 +320,7 @@ top[top$gene_name %in% c("Egr2", "Fos", "Dusp1", "Nr4a1", "Sik1", "Arc", "Egr1",
 ```
 
 We will now look at the 2 genes reacting differently to Tamoxifen treatment in male and female
+
 ```{r}
 top <- topTable(fit2, coef="Interaction", p.value=0.1, sort.by = "P")
 df <- log2cpm.corrected[top$gene_id,] |>
@@ -438,20 +375,22 @@ head(res_gsea, n=20)
 
 # To finish
 
-- *"Interpretations of sex-related variation are not always commensurate with the story the data actually tell"* (Pape et al. 2024). How do you judge the interpretations of the results in the published paper?
+-   *"Interpretations of sex-related variation are not always commensurate with the story the data actually tell"* (Pape et al. 2024). How do you judge the interpretations of the results in the published paper?
 
-- Discuss potential limitations of the paper and the conclusion about the absence of Tamoxifen effect. 
-  - What is important to notice in the design of the experiment (tamoxifen treatment duration, batches, number of replicates, ...)? 
-  - Have a look at the results and materials and methods section: which analyses were made and how could they influence the results?
+-   Discuss potential limitations of the paper and the conclusion about the absence of Tamoxifen effect.
 
-- Limitations of our reanalysis: what could be improved if we had more time? 
-  - Try subsetting the dataset to one tissue as done by the authors. What do you notice? 
+    -   What is important to notice in the design of the experiment (tamoxifen treatment duration, batches, number of replicates, ...)?
+    -   Have a look at the results and materials and methods section: which analyses were made and how could they influence the results?
 
-- *"Sex is not a causal mechanism"* (Pape et al. 2024): follow-up on some DE genes and try to find which mechanism of action could explain their differential expression patterns.
+-   Limitations of our reanalysis: what could be improved if we had more time?
 
-- Discuss what would be the next steps if that was your research project. Which experiments would you design next? How would you describe the results in a paper?
-  - You can also have a look at other related papers (e.g., https://www.nature.com/articles/s41586-022-04686-1, https://www.ahajournals.org/doi/10.1161/ATVBAHA.123.319922) 
-  - Or look at follow-up papers from the same authors (e.g., https://link.springer.com/article/10.1007/s12035-022-02860-0)
-  
+    -   Try subsetting the dataset to one tissue as done by the authors. What do you notice?
+
+-   *"Sex is not a causal mechanism"* (Pape et al. 2024): follow-up on some DE genes and try to find which mechanism of action could explain their differential expression patterns.
+
+-   Discuss what would be the next steps if that was your research project. Which experiments would you design next? How would you describe the results in a paper?
+
+    -   You can also have a look at other related papers (e.g., https://www.nature.com/articles/s41586-022-04686-1, https://www.ahajournals.org/doi/10.1161/ATVBAHA.123.319922)
+    -   Or look at follow-up papers from the same authors (e.g., https://link.springer.com/article/10.1007/s12035-022-02860-0)
 
 <sub>Icons taken from http://www.flaticon.com/</sub>

@@ -73,8 +73,11 @@ Today we will load directly the reprocessed data loaded from the [recount3 proje
 # Gene filtering
 
 ```{r}
-## Convert to DESeqDataSet object (ignore the design argument for now)
+## Load DESeqDataSet object 
 dds <- readRDS("DESeqDataSet.rds") 
+## Or load directly from Github
+# dds <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/DESeqDataSet.rds"))
+
 ## Apply count data transformation
 vst <- varianceStabilizingTransformation(dds, blind = TRUE)
 meanSdPlot(assay(vst), ranks=FALSE)
