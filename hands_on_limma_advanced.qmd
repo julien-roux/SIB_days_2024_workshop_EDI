@@ -103,7 +103,12 @@ dge <- calcNormFactors(dge)
 log2cpm <- edgeR::cpm(dge, 
                       log=TRUE, 
                       normalized.lib.sizes=TRUE)
+
+## Useful for webR limma script:
 # saveRDS(log2cpm, "log2cpm.rds")
+# saveRDS(dge$samples, "colData.rds")
+# saveRDS(dge$genes, "rowData.rds")
+
 plotDensities(log2cpm, 
               group=dge$samples$group, 
               col=myPalette, 
