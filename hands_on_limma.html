@@ -173,8 +173,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="read-in-data" class="level1">
 <h1>Read in data</h1>
 <p>Raw and processed data are available from GEO <a href="GEO:%20https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE135752">(accession GSE135752)</a></p>
-<p>Today we will load directly the reprocessed data from the <a href="http://rna.recount.bio/docs/index.html">recount3 project</a></p>
-<p><img src="wrench-and-hammer.png" class="img-fluid"> Connect to the <a href="https://jhubiostatistics.shinyapps.io/recount3-study-explorer/">recount3 study explorer</a> and look for our dataset (accession “SRP218156”).</p>
+<p>Today we will load directly the reprocessed data from the <a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02533-6">recount3 project</a>, a project which reprocessed uniformly thousands of bulk RNA-seq datasets from human and mouse. A <a href="https://bioconductor.org/packages/3.17/bioc/html/recount3.html">Bioconductor package</a> allows to easily retrieve this data in the form of standard Bioconductor classes objects, such as <code>RangedSummarizedExperiment</code>.</p>
+<p><img src="wrench-and-hammer.png" class="img-fluid"> Connect to the <a href="https://jhubiostatistics.shinyapps.io/recount3-study-explorer/">recount3 study explorer</a> Shiny app and search for our dataset (accession “SRP218156”).</p>
 <p><img src="elemental-tip.png" class="img-fluid"> Another database of reprocessed datasets is GREIN, which provides interesting QC figures that could be helpful: http://www.ilincs.org/apps/grein/?gse=GSE135752</p>
 <div class="cell" data-hash="hands_on_limma_cache/html/unnamed-chunk-2_94c9afb331af7764e1fc33eee6aabd28">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## retrieve data frame listing all available projects in mouse</span></span>
@@ -710,7 +710,7 @@ PC10  0.227016205 3.34983920  0.04426769 27.734207</code></pre>
 </section>
 <section id="differential-expression-analysis" class="level1">
 <h1>Differential expression analysis</h1>
-<div class="cell" data-hash="hands_on_limma_cache/html/de_analysis_8e67fbe79fbceba44942efdbbaabceec">
+<div class="cell" data-hash="hands_on_limma_cache/html/de_analysis_f47120cc274c95c8f505f080edee3d90">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Design matrix We use an additive model accounting for tissue effect (which</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="do">## is not of main interest here)</span></span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>moma <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span><span class="dv">0</span> <span class="sc">+</span> group <span class="sc">+</span> tissue, <span class="at">data =</span> dge<span class="sc">$</span>samples)</span>
@@ -758,7 +758,7 @@ $Interaction
 22709     2 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Top genes for each contrast</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">topTable</span>(fit2, <span class="at">coef =</span> <span class="st">"Male_vs_female"</span>, <span class="at">n =</span> <span class="dv">10</span>, <span class="at">sort.by =</span> <span class="st">"P"</span>)  <span class="co"># X and Y chromosome genes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">topTable</span>(fit2, <span class="at">coef =</span> <span class="st">"Male_vs_female"</span>, <span class="at">n =</span> <span class="dv">10</span>, <span class="at">sort.by =</span> <span class="st">"P"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   seqnames     start       end  width strand  source type
 ENSMUSG00000056673     chrY    897788    956786  58999      +  HAVANA gene
@@ -932,7 +932,7 @@ ENSMUSG00000023034  9.459263
 ENSMUSG00000054720  8.748828
 ENSMUSG00000035877  8.655949</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">topTable</span>(fit2, <span class="at">coef =</span> <span class="st">"Interaction"</span>, <span class="at">n =</span> <span class="dv">10</span>, <span class="at">sort.by =</span> <span class="st">"P"</span>)  <span class="do">## Nothing significant</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">topTable</span>(fit2, <span class="at">coef =</span> <span class="st">"Interaction"</span>, <span class="at">n =</span> <span class="dv">10</span>, <span class="at">sort.by =</span> <span class="st">"P"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   seqnames     start       end  width strand source type
 ENSMUSG00000004328     chr7  17031507  17062427  30921      - HAVANA gene
@@ -1245,36 +1245,31 @@ ENSMUSG00000024042.7  1.277603e-02 4.233239e-01 -3.248676</code></pre>
 <section id="gsea" class="level1">
 <h1>GSEA</h1>
 <p>It is possible that we detect few significant genes for the interaction but that some trends are visible collectively at the gene set level</p>
-<div class="cell" data-hash="hands_on_limma_cache/html/unnamed-chunk-13_236fca4c402260631183f547c4d91cdf">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dge<span class="sc">$</span>genes<span class="sc">$</span>gene_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "ENSMUSG00000063897" "ENSMUSG00000051412" "ENSMUSG00000061654"
-[4] "ENSMUSG00000079834" "ENSMUSG00000079773" "ENSMUSG00000096271"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>GOmapping <span class="ot">&lt;-</span> AnnotationDbi<span class="sc">::</span><span class="fu">select</span>(org.Mm.eg.db, <span class="at">keys =</span> dge<span class="sc">$</span>genes<span class="sc">$</span>gene_id, <span class="at">keytype =</span> <span class="st">"ENSEMBL"</span>,</span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"GOALL"</span>, <span class="st">"EVIDENCEALL"</span>, <span class="st">"ONTOLOGYALL"</span>))</span>
-<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Transform to list</span></span>
-<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>GOmapping <span class="ot">&lt;-</span> <span class="fu">tapply</span>(GOmapping<span class="sc">$</span>ENSEMBL, <span class="fu">list</span>(GOmapping<span class="sc">$</span>GOALL), unique)</span>
-<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a><span class="do">## process and filter gene sets</span></span>
-<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a>indx <span class="ot">&lt;-</span> <span class="fu">ids2indices</span>(<span class="at">gene.sets =</span> GOmapping, <span class="at">identifiers =</span> dge<span class="sc">$</span>genes<span class="sc">$</span>gene_id)</span>
-<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Filter gene sets smaller than 10 genes, and gene sets larger than 500 genes</span></span>
-<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>indx <span class="ot">&lt;-</span> indx[<span class="fu">sapply</span>(indx, length) <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> <span class="fu">sapply</span>(indx, length) <span class="sc">&lt;</span> <span class="dv">500</span>]</span>
-<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Run CameraPR on the t-statistics</span></span>
-<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a>top <span class="ot">&lt;-</span> <span class="fu">topTable</span>(fit2, <span class="at">coef =</span> <span class="st">"Interaction"</span>, <span class="at">p.value =</span> <span class="dv">1</span>, <span class="at">n =</span> <span class="cn">Inf</span>, <span class="at">sort.by =</span> <span class="st">"none"</span>)</span>
-<span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a>res_gsea <span class="ot">&lt;-</span> <span class="fu">cameraPR</span>(<span class="at">statistic =</span> top<span class="sc">$</span>t, <span class="at">index =</span> indx)</span>
-<span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Add info on Gene Ontology terms</span></span>
-<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a>res_gsea <span class="ot">&lt;-</span> <span class="fu">cbind</span>(res_gsea, AnnotationDbi<span class="sc">::</span><span class="fu">select</span>(GO.db, <span class="at">keys =</span> <span class="fu">row.names</span>(res_gsea),</span>
-<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">keytype =</span> <span class="st">"GOID"</span>, <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"ONTOLOGY"</span>, <span class="st">"TERM"</span>)))  <span class="co">#, 'DEFINITION')))</span></span>
-<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(res_gsea<span class="sc">$</span>FDR <span class="sc">&lt;</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="hands_on_limma_cache/html/unnamed-chunk-13_d59d1803f2aa5077a977805b6e8d3387">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>GOmapping <span class="ot">&lt;-</span> AnnotationDbi<span class="sc">::</span><span class="fu">select</span>(org.Mm.eg.db, <span class="at">keys =</span> dge<span class="sc">$</span>genes<span class="sc">$</span>gene_id, <span class="at">keytype =</span> <span class="st">"ENSEMBL"</span>,</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"GOALL"</span>, <span class="st">"EVIDENCEALL"</span>, <span class="st">"ONTOLOGYALL"</span>))</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Transform to list</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>GOmapping <span class="ot">&lt;-</span> <span class="fu">tapply</span>(GOmapping<span class="sc">$</span>ENSEMBL, <span class="fu">list</span>(GOmapping<span class="sc">$</span>GOALL), unique)</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a><span class="do">## process and filter gene sets</span></span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>indx <span class="ot">&lt;-</span> <span class="fu">ids2indices</span>(<span class="at">gene.sets =</span> GOmapping, <span class="at">identifiers =</span> dge<span class="sc">$</span>genes<span class="sc">$</span>gene_id)</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Filter gene sets smaller than 10 genes, and gene sets larger than 500 genes</span></span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>indx <span class="ot">&lt;-</span> indx[<span class="fu">sapply</span>(indx, length) <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> <span class="fu">sapply</span>(indx, length) <span class="sc">&lt;</span> <span class="dv">500</span>]</span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Run CameraPR on the t-statistics</span></span>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>top <span class="ot">&lt;-</span> <span class="fu">topTable</span>(fit2, <span class="at">coef =</span> <span class="st">"Interaction"</span>, <span class="at">p.value =</span> <span class="dv">1</span>, <span class="at">n =</span> <span class="cn">Inf</span>, <span class="at">sort.by =</span> <span class="st">"none"</span>)</span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>res_gsea <span class="ot">&lt;-</span> <span class="fu">cameraPR</span>(<span class="at">statistic =</span> top<span class="sc">$</span>t, <span class="at">index =</span> indx)</span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Add info on Gene Ontology terms</span></span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>res_gsea <span class="ot">&lt;-</span> <span class="fu">cbind</span>(res_gsea, AnnotationDbi<span class="sc">::</span><span class="fu">select</span>(GO.db, <span class="at">keys =</span> <span class="fu">row.names</span>(res_gsea),</span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">keytype =</span> <span class="st">"GOID"</span>, <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"ONTOLOGY"</span>, <span class="st">"TERM"</span>)))  <span class="co">#, 'DEFINITION')))</span></span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(res_gsea<span class="sc">$</span>FDR <span class="sc">&lt;</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 FALSE  TRUE 
  7808   258 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_gsea, <span class="at">n =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(res_gsea, <span class="at">n =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>           NGenes Direction       PValue         FDR       GOID ONTOLOGY
 GO:0070262     12        Up 8.438252e-07 0.003668068 GO:0070262       BP
