@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "hands_on_limma_webr.html",
+    "href": "hands_on_limma_webr.html",
+    "title": "Hands-on: studying the long-lasting effects of Tamoxifen treatment on the CNS transcriptome across sexes",
+    "section": "",
+    "text": "The past decades have seen large calls for consideration of the sex dimension into research and clinical projects. However as we progress towards more frequent inclusion of this variable, the design of experiments evolved to be much more complex, in particular challenging the analysis steps.\nIn this hands-on session we would like to focus on a particular transcriptomic dataset where the sex variable was considered in addition to other variables of interest, and illustrate a differential expression analysis aiming at rigorously testing for sex differences and notably the presence of interactions between factors. Following on Frédéric’s presentation, we would like to use this hands-on to draw your attention at power issues potentially affecting conclusions, and how to best report results of your analyses.\nToday’s dataset is described in this paper “Tamoxifen induction of Cre recombinase does not cause long-lasting or sexually divergent responses in the CNS epigenome or transcriptome: implications for the design of aging studies”, and focuses on the potential side effects of Tamoxifen treatment, widely used to induce CreERT2 activity in transgenic mouse systems. Tamoxifen acts as an antagonist of estrogen receptor (ER), which could cause differences in response across sexes."
+  },
+  {
+    "objectID": "hands_on_limma_webr.html#expression-of-xist-gene",
+    "href": "hands_on_limma_webr.html#expression-of-xist-gene",
+    "title": "Hands-on: studying the long-lasting effects of Tamoxifen treatment on the CNS transcriptome across sexes",
+    "section": "Expression of Xist gene",
+    "text": "Expression of Xist gene\nXist is a lncRNA regulating the X-chromosome inactivation process in mammals, used to equalize the dosage of X-linked genes between female (XX) and male (XY). It should thus be expressed only in female samples\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "hands_on_limma_webr.html#expression-of-y-chromosome-genes",
+    "href": "hands_on_limma_webr.html#expression-of-y-chromosome-genes",
+    "title": "Hands-on: studying the long-lasting effects of Tamoxifen treatment on the CNS transcriptome across sexes",
+    "section": "Expression of Y-chromosome genes",
+    "text": "Expression of Y-chromosome genes\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n What do you observe? What is going on for some genes? (e.g., Gm20775)\n Bigwig files are available through recount3 for some of the samples and allow to visualize the read coverage (for example on the Y-chromosome) on a genome browser. For example you can provide these links to the UCSC genome browser directly:\n\nPlease enable JavaScript to experience the dynamic code cell content on this page."
+  },
+  {
+    "objectID": "hands_on_limma_webr.html#principal-component-analysis",
+    "href": "hands_on_limma_webr.html#principal-component-analysis",
+    "title": "Hands-on: studying the long-lasting effects of Tamoxifen treatment on the CNS transcriptome across sexes",
+    "section": "Principal component analysis",
+    "text": "Principal component analysis\n\nPlease enable JavaScript to experience the dynamic code cell content on this page.\n To which principal components contribute which factors? Does this corresponds to the expectations? What do you conclude on the relative effect size of different factors?"
+  }
+]
