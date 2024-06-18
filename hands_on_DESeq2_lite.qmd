@@ -303,8 +303,8 @@ ggplot(df, aes(x=group, y=`Normalized expression`, group=tissue, col=tissue)) +
 -   Limitations of our reanalysis: what could be improved if we had more time?
 
     -   Try subsetting the dataset to one tissue as done by the authors. What do you notice?
-    
-    - It is possible that we detect few significant genes for the interaction but that some trends are visible collectively at the gene set level. See the more davanced scripts on the Github repository allowing you to explore this
+
+    -   It is possible that we detect few significant genes for the interaction but that some trends are visible collectively at the gene set level. See the more davanced scripts on the Github repository allowing you to explore this
 
 -   *"Sex is not a causal mechanism"* (Pape et al. 2024): follow-up on some DE genes and try to find which mechanism of action could explain their differential expression patterns.
 
