@@ -16,8 +16,6 @@ webr:
   packages: ["ggplot2", "tidyverse", "RColorBrewer"]
 ---
 
-{{< fa laptop-code >}}
-
 # Introduction
 
 The past decades have seen large calls for consideration of the sex dimension into research and clinical projects. However as we progress towards more frequent inclusion of this variable, the design of experiments evolved to be much more complex, [in particular challenging the analysis steps](https://www.cell.com/cell/fulltext/S0092-8674(24)00174-0).
