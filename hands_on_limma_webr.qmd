@@ -5,7 +5,7 @@ date: "2024-06-24"
 subtitle: "SIB days workshop: Incorporating biological sex as a variable in the design and analysis of biomedical research experiments"
 format: 
   html: 
-    embed-resources: true
+    # embed-resources: true
     toc: true
     toc-location: left
 title-block-banner: true
