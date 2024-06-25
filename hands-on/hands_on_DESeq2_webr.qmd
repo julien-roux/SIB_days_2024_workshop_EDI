@@ -15,6 +15,21 @@ webr:
   packages: ["ggplot2", "tidyverse", "RColorBrewer"]
 ---
 
+<!--
+
+## TO RENDER .qmd file FOR PUBLISHING on github.io ##
+vi _quarto.yml
+touch .nojekyll
+quarto render hands_on_limma_webr.qmd 
+git add docs
+git commit -m "Publish site to docs/"
+git push
+
+# Set up on repository that docs/ folder is used for publishing on github pages 
+
+-->
+
+
 # Introduction
 
 The past decades have seen large calls for consideration of the sex dimension into research and clinical projects. However as we progress towards more frequent inclusion of this variable, the design of experiments evolved to be much more complex, [in particular challenging the analysis steps](https://www.cell.com/cell/fulltext/S0092-8674(24)00174-0).
