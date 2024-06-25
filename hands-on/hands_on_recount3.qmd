@@ -1,0 +1,142 @@
+---
+title: "Hands-on: studying the long-lasting effects of Tamoxifen treatment on the CNS transcriptome across sexes"
+author: "Julien Roux, University of Basel, SIB"
+date: "2024-06-24"
+subtitle: "SIB days workshop: Incorporating biological sex as a variable in the design and analysis of biomedical research experiments"
+format: 
+  html: 
+    toc: true
+    toc-location: left
+title-block-banner: true
+editor: visual
+knitr:
+  opts_chunk: 
+    collapse: false
+    echo: true
+    cache: true
+    prompt: false
+    tidy: true
+    comment: #>
+    message: false
+---
+
+# Introduction
+
+The past decades have seen large calls for consideration of the sex dimension into research and clinical projects. However as we progress towards more frequent inclusion of this variable, the design of experiments evolved to be much more complex, [in particular challenging the analysis steps](https://www.cell.com/cell/fulltext/S0092-8674(24)00174-0).
+
+In this hands-on session we would like to focus on a particular transcriptomic dataset where the sex variable was considered in addition to other variables of interest, and illustrate a differential expression analysis aiming at rigorously testing for sex differences and notably the presence of interactions between factors. Following on Frédéric's presentation, we would like to use this hands-on to draw your attention at power issues potentially affecting conclusions, and how to best report results of your analyses.
+
+Today's dataset is described in this paper ["Tamoxifen induction of Cre recombinase does not cause long-lasting or sexually divergent responses in the CNS epigenome or transcriptome: implications for the design of aging studies"](https://link.springer.com/article/10.1007/s11357-019-00090-2), and focuses on the potential side effects of Tamoxifen treatment, widely used to induce CreERT2 activity in transgenic mouse systems. Tamoxifen acts as an antagonist of estrogen receptor (ER), which could cause differences in response across sexes.
+
+![](Screenshot 2024-06-17 at 14.55.37.png)
+
+# Loading data in R
+
+```{r}
+#| warning: false
+#| message: true
+
+## If packages are missing:
+# install.packages("BiocManager")
+# BiocManager::install("...")
+
+## Setting up working directory
+library(here)
+
+library(recount3)
+library(SummarizedExperiment)
+library(scuttle)
+library(edgeR)
+library(DESeq2)
+
+saveRDS(devtools::session_info(), "session_info_recount3.rds")
+```
+
+# Read in data
+
+Raw and processed data are available from GEO [(accession GSE135752)](GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE135752)
+
+Today we will load directly the reprocessed data from the [recount3 project](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02533-6), a project which reprocessed uniformly thousands of bulk RNA-seq datasets from human and mouse. A [Bioconductor package](https://bioconductor.org/packages/3.17/bioc/html/recount3.html) allows to easily retrieve this data in the form of standard Bioconductor classes objects, such as `RangedSummarizedExperiment`.
+
+![](wrench-and-hammer.png) Connect to the [recount3 study explorer](https://jhubiostatistics.shinyapps.io/recount3-study-explorer/) Shiny app and search for our dataset (accession "SRP218156").
+
+![](elemental-tip.png) Another database of reprocessed datasets is GREIN, which provides interesting QC figures that could be helpful: http://www.ilincs.org/apps/grein/?gse=GSE135752
+
+
+```{r}
+## retrieve data frame listing all available projects in mouse
+all_projects <- available_projects(organism = "mouse")
+## Select our dataset
+selected <- all_projects |> subset(project == "SRP218156")
+## Create a RangedSummarizedExperiment object at the gene level
+rse_gene <- create_rse(project_info = selected)
+```
+
+# Examine RangedSummarizedExperiment object
+```{r}
+## The recount project records the sum of the base level coverage for each gene. These raw counts have to be transformed to "classical" read-counts to be processed by standard DE analysis tools 
+assayNames(rse_gene)
+assay(rse_gene, "counts") <- transform_counts(rse_gene)
+
+## Information about our reprocessed dataset
+metadata(rse_gene)
+## Gene metadata
+rowRanges(rse_gene)
+rowData(rse_gene)
+## Parse the Ensembl IDs (useful later)
+rowData(rse_gene)$gene_id <- gsub("\\.\\d+$", "", rowData(rse_gene)$gene_id)
+row.names(rse_gene) <- rowData(rse_gene)$gene_id
+
+## Sample metadata: a lot of columns!
+# colData(rse_gene)
+recount3_cols <- colnames(colData(rse_gene))
+## Group columns by source
+sort(table(gsub("\\..*", "", recount3_cols)))
+
+## The colData from SRA include the sample information. What does each column represent?
+head(colData(rse_gene)[, grep("sra", recount3_cols)])
+## This column corresponds to the sample name on GEO
+table(rse_gene$sra.sample_title) 
+## For some samples we have multiple runs (SRR IDs), let's sum their read counts
+rse_gene <- aggregateAcrossCells(rse_gene, 
+                                 ids = rse_gene$sra.sample_title, 
+                                 statistics = "sum") 
+```
+
+# Add metadata columns
+```{r}
+## Simplify metadata columns of interest by parsing "sra.sample_attributes"
+rse_gene$sex <- factor(strsplit2(rse_gene$sra.sample_attributes, split = "\\|")[,2])
+levels(rse_gene$sex) <- gsub("Sex;;", "", levels(rse_gene$sex))
+
+rse_gene$tissue <- factor(strsplit2(rse_gene$sra.sample_attributes, split = "\\|")[,3])
+levels(rse_gene$tissue) <- gsub("source_name;;", "", levels(rse_gene$tissue))
+
+rse_gene$treatment <- factor(strsplit2(rse_gene$sra.sample_attributes, split = "\\|")[,4])
+levels(rse_gene$treatment) <- gsub("treatment;;", "", levels(rse_gene$treatment))
+levels(rse_gene$treatment) <- gsub("\\s\\(Sunflower\\sOil\\)", "", levels(rse_gene$treatment))
+## Relevel to have Vehicle as reference
+rse_gene$treatment <- relevel(rse_gene$treatment, ref = "Vehicle")
+
+## From the methods it seems that the 3 tissues were extracted from the same mouse
+rse_gene$mouse <- factor(gsub("ctx|ret", "", rse_gene$sra.sample_title))
+
+## Add grouping variable (grouping 2 factors together, will be useful later) and order levels in a logical way
+rse_gene$group <- factor(paste0(rse_gene$treatment, ".", rse_gene$sex), levels=c("Vehicle.female", "Tamoxifen.female", "Vehicle.male", "Tamoxifen.male"))
+
+## Overview of experiment design
+dim(rse_gene) 
+table(rse_gene$sex, rse_gene$treatment, rse_gene$tissue) 
+```
+
+# Convert to DGEList object
+```{r}
+dge <- SE2DGEList(rse_gene)
+saveRDS(dge, "DGEList.rds")
+```
+
+# Convert to DESeqDataSet object
+```{r}
+dds <- DESeqDataSet(rse_gene, design = ~ 1) 
+saveRDS(dds, "DESeqDataSet.rds")
+```
