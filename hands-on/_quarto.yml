@@ -1,0 +1,6 @@
+project:
+  type: website
+  output-dir: ../docs
+resources: 
+    - "webr-serviceworker.js"
+    - "webr-worker.js"
