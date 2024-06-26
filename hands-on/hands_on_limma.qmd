@@ -74,7 +74,7 @@ Today we will load directly the reprocessed data loaded from the [recount3 proje
 ## Load DESeqDataSet object 
 dge <- readRDS("DGEList.rds") 
 ## Or load directly from Github
-# dge <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/DGEList.rds"))
+# dge <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/hands-on/DGEList.rds"))
 
 ## Visualize distribution before filtering (protein-coding genes only)
 plotDensities(edgeR::cpm(dge, log = T)[dge$genes$gene_type %in% "protein_coding", ], 

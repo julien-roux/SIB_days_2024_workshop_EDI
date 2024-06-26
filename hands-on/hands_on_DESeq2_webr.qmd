@@ -77,7 +77,7 @@ Today we will load directly the reprocessed data loaded from the [recount3 proje
 
 ```{webr-r}
 ## Load DESeqDataSet object directly from Github
-dds <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/DESeqDataSet.rds"))
+dds <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/hands-on/DESeqDataSet.rds"))
 
 ## Apply count data transformation
 vst <- varianceStabilizingTransformation(dds, blind = TRUE)

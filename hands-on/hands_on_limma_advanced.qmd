@@ -34,7 +34,6 @@ Today's dataset is described in this paper ["Tamoxifen induction of Cre recombin
 
 **This script presents a slightly more complex way -- but maybe better -- of analyzing the dataset. Use it if you are already familiar with DE analysis with the limma/edgeR packages**
 
-
 # Loading data in R
 
 ```{r}
@@ -79,7 +78,7 @@ Today we will load directly the reprocessed data loaded from the [recount3 proje
 ## Load DESeqDataSet object 
 dge <- readRDS("DGEList.rds") 
 ## Or load directly from Github
-# dge <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/DGEList.rds"))
+# dge <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/hands-on/DGEList.rds"))
 
 ## Visualize distribution before filtering (protein-coding genes only)
 plotDensities(edgeR::cpm(dge, log = T)[dge$genes$gene_type %in% "protein_coding", ], 
@@ -282,7 +281,6 @@ topTable(fit2, coef="Interaction_Retina", n=10, sort.by="P")
 
 ![](round-help-button.png) What does this tissue-by-tissue analysis reveals that was not so apparent in the `hands_on_limma.qmd` script (where tissue variation was absorbed by the model)?
 
-
 ```{r}
 ## Plot expression of top genes: choose one contrast 
 ## For example: sex differences in Cortex, top 10 genes
@@ -315,7 +313,7 @@ top[top$gene_name %in% c("Egr2", "Fos", "Dusp1", "Nr4a1", "Sik1", "Arc", "Egr1",
 
 ## Interactions term
 
-We will now look at the genes reacting differently to Tamoxifen treatment in male and female. The genes reaching signficiance in the different tissues are distinct 
+We will now look at the genes reacting differently to Tamoxifen treatment in male and female. The genes reaching signficiance in the different tissues are distinct
 
 ```{r}
 ## Genes significant wiht a relaxed FDR cutoff of 20%

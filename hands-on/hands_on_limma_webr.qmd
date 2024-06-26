@@ -52,9 +52,9 @@ Today we will load directly the reprocessed data loaded from the [recount3 proje
 
 ```{webr-r}
 ## Load DESeqDataSet object from Github
-log2cpm <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/log2cpm.rds"))
-colData <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/colData.rds"))
-rowData <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/rowData.rds"))
+log2cpm <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/hands-on/log2cpm.rds"))
+colData <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/hands-on/colData.rds"))
+rowData <- readRDS(url("https://raw.githubusercontent.com/julien-roux/SIB_days_2024_workshop_EDI/main/hands-on/rowData.rds"))
 
 ## Distribution of expression values 
 boxplot(log2cpm, 

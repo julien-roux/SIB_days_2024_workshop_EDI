@@ -28,7 +28,7 @@ In this hands-on session we would like to focus on a particular transcriptomic d
 
 Today's dataset is described in this paper ["Tamoxifen induction of Cre recombinase does not cause long-lasting or sexually divergent responses in the CNS epigenome or transcriptome: implications for the design of aging studies"](https://link.springer.com/article/10.1007/s11357-019-00090-2), and focuses on the potential side effects of Tamoxifen treatment, widely used to induce CreERT2 activity in transgenic mouse systems. Tamoxifen acts as an antagonist of estrogen receptor (ER), which could cause differences in response across sexes.
 
-![](Screenshot 2024-06-17 at 14.55.37.png)
+![](Screenshot%202024-06-17%20at%2014.55.37.png)
 
 # Loading data in R
 
@@ -54,14 +54,13 @@ saveRDS(devtools::session_info(), "session_info_recount3.rds")
 
 # Read in data
 
-Raw and processed data are available from GEO [(accession GSE135752)](GEO: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE135752)
+Raw and processed data are available from GEO [(accession GSE135752)](GEO:%20https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE135752)
 
 Today we will load directly the reprocessed data from the [recount3 project](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02533-6), a project which reprocessed uniformly thousands of bulk RNA-seq datasets from human and mouse. A [Bioconductor package](https://bioconductor.org/packages/3.17/bioc/html/recount3.html) allows to easily retrieve this data in the form of standard Bioconductor classes objects, such as `RangedSummarizedExperiment`.
 
 ![](wrench-and-hammer.png) Connect to the [recount3 study explorer](https://jhubiostatistics.shinyapps.io/recount3-study-explorer/) Shiny app and search for our dataset (accession "SRP218156").
 
 ![](elemental-tip.png) Another database of reprocessed datasets is GREIN, which provides interesting QC figures that could be helpful: http://www.ilincs.org/apps/grein/?gse=GSE135752
-
 
 ```{r}
 ## retrieve data frame listing all available projects in mouse
@@ -73,6 +72,7 @@ rse_gene <- create_rse(project_info = selected)
 ```
 
 # Examine RangedSummarizedExperiment object
+
 ```{r}
 ## The recount project records the sum of the base level coverage for each gene. These raw counts have to be transformed to "classical" read-counts to be processed by standard DE analysis tools 
 assayNames(rse_gene)
@@ -104,6 +104,7 @@ rse_gene <- aggregateAcrossCells(rse_gene,
 ```
 
 # Add metadata columns
+
 ```{r}
 ## Simplify metadata columns of interest by parsing "sra.sample_attributes"
 rse_gene$sex <- factor(strsplit2(rse_gene$sra.sample_attributes, split = "\\|")[,2])
@@ -130,12 +131,14 @@ table(rse_gene$sex, rse_gene$treatment, rse_gene$tissue)
 ```
 
 # Convert to DGEList object
+
 ```{r}
 dge <- SE2DGEList(rse_gene)
 saveRDS(dge, "DGEList.rds")
 ```
 
 # Convert to DESeqDataSet object
+
 ```{r}
 dds <- DESeqDataSet(rse_gene, design = ~ 1) 
 saveRDS(dds, "DESeqDataSet.rds")
